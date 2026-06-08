@@ -62,7 +62,7 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   try {
-    const { nombre, instructor, capacidad_maxima, fecha_inicio, descripcion } = req.body;
+    const { nombre, instructor, capacidad_maxima, fecha_inicio, descripcion, imagen_url } = req.body;
 
     if (!nombre || !instructor || !fecha_inicio) {
       return res.status(400).json({ error: true, message: 'nombre, instructor y fecha_inicio son obligatorios' });
@@ -84,7 +84,8 @@ const create = async (req, res, next) => {
       instructor: instructor.trim(),
       capacidad_maxima: cap || 20,
       fecha_inicio,
-      descripcion: descripcion || null
+      descripcion: descripcion || null,
+      imagen_url: imagen_url || null
     });
     res.status(201).json(taller);
   } catch (err) {
@@ -97,7 +98,7 @@ const update = async (req, res, next) => {
     const taller = await Taller.findByPk(req.params.id);
     if (!taller) return res.status(404).json({ error: true, message: 'Taller no encontrado' });
 
-    const { nombre, instructor, capacidad_maxima, fecha_inicio, descripcion, estado } = req.body;
+    const { nombre, instructor, capacidad_maxima, fecha_inicio, descripcion, estado, imagen_url } = req.body;
 
     if (nombre !== undefined && (typeof nombre !== 'string' || nombre.trim() === '')) {
       return res.status(422).json({ error: true, message: 'nombre debe ser un texto no vacío' });
@@ -120,6 +121,7 @@ const update = async (req, res, next) => {
     if (fecha_inicio !== undefined) updates.fecha_inicio = fecha_inicio;
     if (descripcion !== undefined) updates.descripcion = descripcion;
     if (estado !== undefined) updates.estado = estado;
+    if (imagen_url !== undefined) updates.imagen_url = imagen_url;
 
     await taller.update(updates);
     res.json(taller);

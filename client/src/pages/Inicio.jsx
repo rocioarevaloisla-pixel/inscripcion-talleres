@@ -19,12 +19,14 @@ export default function Inicio() {
           <Link to="/talleres">Ir a Talleres</Link>
         </div>
 
-        <div className="inicio-card">
-          <div className="inicio-card-icon">📋</div>
-          <h3>Mis Inscripciones</h3>
-          <p>Revisa tus inscripciones activas.</p>
-          <Link to="/mis-inscripciones">Ver inscripciones</Link>
-        </div>
+        {usuario.rol !== 'admin' && (
+          <div className="inicio-card">
+            <div className="inicio-card-icon">📋</div>
+            <h3>Mis Inscripciones</h3>
+            <p>Revisa tus inscripciones activas.</p>
+            <Link to="/mis-inscripciones">Ver inscripciones</Link>
+          </div>
+        )}
 
         {usuario.rol === 'admin' && (
           <div className="inicio-card admin-card">

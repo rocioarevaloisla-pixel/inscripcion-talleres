@@ -4,7 +4,7 @@ import './talleres.css';
 
 export default function Talleres() {
   const [talleres, setTalleres] = useState([]);
-  const [form, setForm] = useState({ nombre: '', instructor: '', capacidad_maxima: '', fecha_inicio: '', descripcion: '', estado: 'activo' });
+  const [form, setForm] = useState({ nombre: '', instructor: '', capacidad_maxima: '', fecha_inicio: '', descripcion: '', estado: 'activo', imagen_url: '' });
   const [editando, setEditando] = useState(null);
   const [adminTab, setAdminTab] = useState('ver');
   const [error, setError] = useState('');
@@ -63,7 +63,7 @@ export default function Talleres() {
       } else {
         await api.post('/talleres', form);
       }
-      setForm({ nombre: '', instructor: '', capacidad_maxima: '', fecha_inicio: '', descripcion: '', estado: 'activo' });
+      setForm({ nombre: '', instructor: '', capacidad_maxima: '', fecha_inicio: '', descripcion: '', estado: 'activo', imagen_url: '' });
       setEditando(null);
       setAdminTab('ver');
       cargarTalleres();
@@ -74,7 +74,7 @@ export default function Talleres() {
 
   const handleNuevo = () => {
     setEditando(null);
-    setForm({ nombre: '', instructor: '', capacidad_maxima: '', fecha_inicio: '', descripcion: '', estado: 'activo' });
+    setForm({ nombre: '', instructor: '', capacidad_maxima: '', fecha_inicio: '', descripcion: '', estado: 'activo', imagen_url: '' });
     setAdminTab('nuevo');
   };
 
@@ -87,7 +87,8 @@ export default function Talleres() {
       capacidad_maxima: taller.capacidad_maxima,
       fecha_inicio: taller.fecha_inicio,
       descripcion: taller.descripcion || '',
-      estado: taller.estado
+      estado: taller.estado,
+      imagen_url: taller.imagen_url || ''
     });
   };
 
@@ -104,7 +105,7 @@ export default function Talleres() {
 
   const handleCancelar = () => {
     setEditando(null);
-    setForm({ nombre: '', instructor: '', capacidad_maxima: '', fecha_inicio: '', descripcion: '', estado: 'activo' });
+    setForm({ nombre: '', instructor: '', capacidad_maxima: '', fecha_inicio: '', descripcion: '', estado: 'activo', imagen_url: '' });
     setAdminTab('ver');
   };
 
@@ -209,6 +210,8 @@ export default function Talleres() {
               value={form.fecha_inicio} onChange={handleChange} required />
             <textarea name="descripcion" placeholder="Descripción (opcional)"
               value={form.descripcion} onChange={handleChange} />
+            <input name="imagen_url" placeholder="URL de la imagen (opcional)"
+              value={form.imagen_url} onChange={handleChange} />
             {editando && (
               <select name="estado" value={form.estado} onChange={handleChange} className="talleres-select">
                 <option value="activo">Activo</option>
@@ -244,6 +247,7 @@ export default function Talleres() {
           <table className="talleres-tabla">
             <thead>
               <tr>
+                <th>Imagen</th>
                 <th>Nombre</th>
                 <th>Instructor</th>
                 <th>Capacidad</th>
@@ -256,6 +260,12 @@ export default function Talleres() {
             <tbody>
               {talleresFiltrados.map(t => (
                 <tr key={t.id}>
+                  <td>
+                    {t.imagen_url
+                      ? <img src={t.imagen_url} alt={t.nombre} className="tabla-imagen" />
+                      : <span className="tabla-imagen-placeholder">—</span>
+                    }
+                  </td>
                   <td><strong>{t.nombre}</strong></td>
                   <td>{t.instructor}</td>
                   <td>{t.capacidad_maxima}</td>
@@ -283,6 +293,7 @@ export default function Talleres() {
             return (
               <div className="taller-card" key={t.id}>
                 <div className="taller-card-header">
+                  {t.imagen_url && <img src={t.imagen_url} alt={t.nombre} className="taller-card-img" />}
                   {t.ya_inscrito ? (
                     <span className="badge-ya-inscrito">Ya inscrito</span>
                   ) : (

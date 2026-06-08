@@ -17,6 +17,10 @@ const Taller = sequelize.define('Taller', {
     type: DataTypes.INTEGER,
     defaultValue: 20
   },
+  imagen_url: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
   fecha_inicio: {
     type: DataTypes.DATEONLY,
     allowNull: false

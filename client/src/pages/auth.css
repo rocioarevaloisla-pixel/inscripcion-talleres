@@ -1,9 +1,24 @@
 .auth-container {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background: var(--gradient-auth);
+}
+
+.auth-back {
+  align-self: flex-start;
+  margin: 1rem 0 0 2rem;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.auth-back:hover {
+  opacity: 1;
 }
 
 .auth-card {

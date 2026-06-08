@@ -1,0 +1,132 @@
+.dashboard-container {
+  padding: 2rem;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.dashboard-titulo {
+  color: var(--midnight-violet);
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-error {
+  background: var(--petal-frost);
+  color: var(--midnight-violet);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  margin: 2rem;
+  border-left: 3px solid var(--midnight-violet);
+}
+
+.dashboard-vacio {
+  color: var(--glaucous);
+  font-style: italic;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-card {
+  background: var(--card-bg);
+  padding: 1.25rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  border-top: 3px solid var(--persian-blue);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.dashboard-card-icon {
+  font-size: 1.8rem;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.dashboard-card-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--midnight-violet);
+  line-height: 1.2;
+}
+
+.dashboard-card-label {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-top: 0.2rem;
+}
+
+.dashboard-grafico {
+  background: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.dashboard-grafico h3 {
+  color: var(--midnight-violet);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+}
+
+.dashboard-barras {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.dashboard-barra-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dashboard-barra-label {
+  width: 80px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.dashboard-barra-track {
+  flex: 1;
+  height: 28px;
+  background: var(--lavender);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.dashboard-barra-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--persian-blue), var(--glaucous));
+  border-radius: 4px;
+  min-width: 0;
+  transition: width 0.6s ease;
+  display: flex;
+  align-items: center;
+  padding-left: 0.5rem;
+}
+
+.dashboard-barra-cant {
+  color: white;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}

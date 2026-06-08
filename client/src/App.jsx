@@ -3,7 +3,10 @@ import Auth from './pages/Auth';
 import Inicio from './pages/Inicio';
 import Talleres from './pages/Talleres';
 import MisInscripciones from './pages/MisInscripciones';
+import Dashboard from './pages/Dashboard';
+import Landing from './pages/Landing';
 import './pages/inicio.css';
+import './pages/landing.css';
 
 const RutaProtegida = ({ children }) => {
   const token = localStorage.getItem('token');
@@ -19,7 +22,7 @@ function NavBar() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
-    navigate('/login');
+    navigate('/');
   };
 
   if (!token) return null;
@@ -28,12 +31,17 @@ function NavBar() {
 
   return (
     <nav className="inicio-nav">
-      <Link to="/" className="inicio-marca" style={{ textDecoration: 'none' }}>
-        Inscripción a Talleres
+      <Link to="/inicio" className="inicio-marca" style={{ textDecoration: 'none' }}>
+        Wishdin
       </Link>
       <div className="inicio-nav-links">
         <Link to="/talleres" className={isActive('/talleres')}>Talleres</Link>
-        <Link to="/mis-inscripciones" className={isActive('/mis-inscripciones')}>Mis Inscripciones</Link>
+        {usuario.rol === 'admin' && (
+          <Link to="/dashboard" className={isActive('/dashboard')}>Dashboard</Link>
+        )}
+        {usuario.rol !== 'admin' && (
+          <Link to="/mis-inscripciones" className={isActive('/mis-inscripciones')}>Mis Inscripciones</Link>
+        )}
         <div className="inicio-usuario-badge">
           {usuario.nombre}
           <span className={`inicio-rol-badge ${usuario.rol}`}>{usuario.rol}</span>
@@ -51,9 +59,11 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<Auth />} />
         <Route path="/registro" element={<Auth />} />
-        <Route path="/" element={<RutaProtegida><Inicio /></RutaProtegida>} />
+        <Route path="/" element={<Landing />} />
+        <Route path="/inicio" element={<RutaProtegida><Inicio /></RutaProtegida>} />
         <Route path="/talleres" element={<RutaProtegida><Talleres /></RutaProtegida>} />
         <Route path="/mis-inscripciones" element={<RutaProtegida><MisInscripciones /></RutaProtegida>} />
+        <Route path="/dashboard" element={<RutaProtegida><Dashboard /></RutaProtegida>} />
       </Routes>
     </BrowserRouter>
   );

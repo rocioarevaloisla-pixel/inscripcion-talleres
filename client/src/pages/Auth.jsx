@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../api';
 import './auth.css';
 
@@ -33,7 +33,7 @@ export default function Auth() {
       const res = await api.post('/auth/login', loginForm);
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('usuario', JSON.stringify(res.data.usuario));
-      navigate('/');
+      navigate('/inicio');
     } catch (err) {
       setLoginError(err.response?.data?.error || 'Error al iniciar sesión');
     } finally {
@@ -61,6 +61,7 @@ export default function Auth() {
 
   return (
     <div className="auth-container">
+      <Link to="/" className="auth-back">← Volver al inicio</Link>
       <div className={`auth-card ${showSignup ? 'show-signup' : ''}`}>
         <div className="auth-signup">
           <label onClick={toggleLogin} className="auth-label">Registrarse</label>

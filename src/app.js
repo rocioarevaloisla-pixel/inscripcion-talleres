@@ -7,7 +7,8 @@ require('./models/index');
 const authRouter = require('./routes/auth');
 const talleresRouter = require('./routes/talleres');
 const inscripcionesRouter = require('./routes/inscripciones');
-const { verificarToken } = require('./middlewares/auth');
+const estadisticasRouter = require('./routes/estadisticas');
+const { verificarToken, verificarTokenOpcional } = require('./middlewares/auth');
 const { errorHandler, notFoundHandler } = require('./middlewares/errorHandler');
 
 const app = express();
@@ -20,8 +21,9 @@ app.get('/api/health', (req, res) => {
 });
 app.use('/api/auth', authRouter);
 
-app.use('/api/talleres', verificarToken, talleresRouter);
+app.use('/api/talleres', verificarTokenOpcional, talleresRouter);
 app.use('/api/inscripciones', verificarToken, inscripcionesRouter);
+app.use('/api/estadisticas', verificarToken, estadisticasRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

@@ -18,7 +18,7 @@ const verificarToken = (req, res, next) => {
 };
 
 const verificarAdmin = (req, res, next) => {
-  if (req.usuario.rol !== 'admin') {
+  if (!req.usuario || req.usuario.rol !== 'admin') {
     return res.status(403).json({ error: 'Acción permitida solo para administradores' });
   }
   next();
