@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const verificarToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+  const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
     return res.status(401).json({ error: 'Token requerido' });
@@ -17,4 +17,11 @@ const verificarToken = (req, res, next) => {
   }
 };
 
-module.exports = { verificarToken };
+const verificarAdmin = (req, res, next) => {
+  if (req.usuario.rol !== 'admin') {
+    return res.status(403).json({ error: 'Acción permitida solo para administradores' });
+  }
+  next();
+};
+
+module.exports = { verificarToken, verificarAdmin };

@@ -1,22 +1,70 @@
 const Inscripcion = require('../models/Inscripcion');
 const Taller = require('../models/Taller');
+const { Op } = require('sequelize');
 
-const getAll = async (req, res) => {
+const getAll = async (req, res, next) => {
   try {
-    const inscripciones = await Inscripcion.findAll({ include: Taller });
+    const inscripciones = await Inscripcion.findAll({
+      include: [
+        { model: Taller, attributes: ['nombre', 'instructor', 'capacidad_maxima', 'estado'] }
+      ]
+    });
     res.json(inscripciones);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    next(err);
   }
 };
 
-const create = async (req, res) => {
+const create = async (req, res, next) => {
   try {
-    const inscripcion = await Inscripcion.create(req.body);
+    const { taller_id, nombre_alumno, email_alumno } = req.body;
+
+    if (!taller_id || !nombre_alumno || !email_alumno) {
+      return res.status(400).json({ error: true, message: 'taller_id, nombre_alumno y email_alumno son obligatorios' });
+    }
+
+    const taller = await Taller.findByPk(taller_id);
+    if (!taller) {
+      return res.status(404).json({ error: true, message: 'Taller no encontrado' });
+    }
+
+    if (taller.estado !== 'activo') {
+      return res.status(422).json({ error: true, message: 'El taller no está disponible para inscripciones' });
+    }
+
+    const inscripcionesActuales = await Inscripcion.count({
+      where: { taller_id, estado: { [Op.ne]: 'cancelada' } }
+    });
+
+    if (inscripcionesActuales >= taller.capacidad_maxima) {
+      return res.status(409).json({ error: true, message: 'El taller ha alcanzado su capacidad máxima' });
+    }
+
+    const inscripcion = await Inscripcion.create({
+      taller_id,
+      nombre_alumno,
+      email_alumno,
+      usuario_id: req.usuario.id
+    });
+
     res.status(201).json(inscripcion);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    next(err);
   }
 };
 
-module.exports = { getAll, create };
+const getMisInscripciones = async (req, res, next) => {
+  try {
+    const inscripciones = await Inscripcion.findAll({
+      where: { usuario_id: req.usuario.id },
+      include: [
+        { model: Taller, attributes: ['nombre', 'instructor', 'fecha_inicio', 'capacidad_maxima', 'estado'] }
+      ]
+    });
+    res.json(inscripciones);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getAll, create, getMisInscripciones };
