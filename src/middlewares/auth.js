@@ -24,4 +24,21 @@ const verificarAdmin = (req, res, next) => {
   next();
 };
 
-module.exports = { verificarToken, verificarAdmin };
+const verificarTokenOpcional = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return next();
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.usuario = decoded;
+  } catch {
+    // Token inválido o expirado, continuamos sin usuario
+  }
+  next();
+};
+
+module.exports = { verificarToken, verificarAdmin, verificarTokenOpcional };

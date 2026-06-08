@@ -32,6 +32,18 @@ const create = async (req, res, next) => {
       return res.status(422).json({ error: true, message: 'El taller no está disponible para inscripciones' });
     }
 
+    const yaInscrito = await Inscripcion.findOne({
+      where: {
+        usuario_id: req.usuario.id,
+        taller_id,
+        estado: { [Op.ne]: 'cancelada' }
+      }
+    });
+
+    if (yaInscrito) {
+      return res.status(409).json({ error: true, message: 'Ya estás inscrito en este taller' });
+    }
+
     const inscripcionesActuales = await Inscripcion.count({
       where: { taller_id, estado: { [Op.ne]: 'cancelada' } }
     });

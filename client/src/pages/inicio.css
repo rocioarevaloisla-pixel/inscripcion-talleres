@@ -1,15 +1,20 @@
 .inicio-nav {
-  background: #4f46e5;
-  padding: 1rem 2rem;
+  background: var(--gradient-primary);
+  padding: 0.8rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 2px 12px rgba(69, 12, 63, 0.25);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .inicio-marca {
   color: white;
-  font-weight: bold;
-  font-size: 1.1rem;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
 }
 
 .inicio-nav-links {
@@ -19,33 +24,164 @@
 }
 
 .inicio-nav-links a {
-  color: white;
+  color: var(--lavender);
   text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+  padding: 0.35rem 0;
 }
 
 .inicio-nav-links a:hover {
-  text-decoration: underline;
+  color: var(--petal-frost);
+  text-decoration: none;
 }
 
-.inicio-usuario {
-  color: #c7d2fe;
+.inicio-nav-links a.active {
+  color: white;
+  border-bottom: 2px solid var(--petal-frost);
+}
+
+.inicio-usuario-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--lavender);
   font-size: 0.9rem;
 }
 
+.inicio-rol-badge {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.inicio-rol-badge.admin {
+  background: var(--petal-frost);
+  color: var(--midnight-violet);
+}
+
+.inicio-rol-badge.usuario {
+  background: var(--lavender);
+  color: var(--persian-blue);
+}
+
 .inicio-logout {
-  padding: 0.4rem 1rem;
+  padding: 0.45rem 1.1rem;
   background: white;
-  color: #4f46e5;
+  color: var(--midnight-violet);
   border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: background 0.2s, transform 0.1s;
 }
 
 .inicio-logout:hover {
-  background: #e0e7ff;
+  background: var(--petal-frost);
+  transform: translateY(-1px);
 }
 
-.inicio-main {
+.inicio-hero {
+  min-height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 2rem;
+  background: var(--gradient-hero);
+}
+
+.inicio-hero-content {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.inicio-hero-content h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--midnight-violet);
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.02em;
+}
+
+.inicio-hero-content h1 span {
+  color: var(--persian-blue);
+}
+
+.inicio-hero-content p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 440px;
+  line-height: 1.5;
+  margin: 0 auto;
+}
+
+.inicio-dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 720px;
+}
+
+.inicio-card {
+  background: var(--card-bg);
+  padding: 1.75rem 1.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 2px 12px rgba(77, 62, 163, 0.07);
+  text-align: center;
+  transition: transform 0.25s, box-shadow 0.3s;
+  border-top: 3px solid var(--persian-blue);
+}
+
+.inicio-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(77, 62, 163, 0.13);
+}
+
+.inicio-card.admin-card {
+  border-top-color: var(--midnight-violet);
+}
+
+.inicio-card-icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.inicio-card h3 {
+  color: var(--midnight-violet);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.inicio-card p {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.inicio-card a {
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  background: var(--gradient-primary);
+  color: white;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.inicio-card a:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(77, 62, 163, 0.25);
+  color: white;
+  text-decoration: none;
 }

@@ -1,6 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate, Link, useNavigate } from 'react-router-dom';
-import Login from './pages/Login';
-import Registro from './pages/Registro';
+import { BrowserRouter, Routes, Route, Navigate, Link, useNavigate, useLocation } from 'react-router-dom';
+import Auth from './pages/Auth';
 import Inicio from './pages/Inicio';
 import Talleres from './pages/Talleres';
 import MisInscripciones from './pages/MisInscripciones';
@@ -13,7 +12,9 @@ const RutaProtegida = ({ children }) => {
 
 function NavBar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const token = localStorage.getItem('token');
+  const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -23,14 +24,20 @@ function NavBar() {
 
   if (!token) return null;
 
+  const isActive = (path) => location.pathname === path ? 'active' : '';
+
   return (
     <nav className="inicio-nav">
       <Link to="/" className="inicio-marca" style={{ textDecoration: 'none' }}>
         Inscripción a Talleres
       </Link>
       <div className="inicio-nav-links">
-        <Link to="/talleres">Talleres</Link>
-        <Link to="/mis-inscripciones">Mis Inscripciones</Link>
+        <Link to="/talleres" className={isActive('/talleres')}>Talleres</Link>
+        <Link to="/mis-inscripciones" className={isActive('/mis-inscripciones')}>Mis Inscripciones</Link>
+        <div className="inicio-usuario-badge">
+          {usuario.nombre}
+          <span className={`inicio-rol-badge ${usuario.rol}`}>{usuario.rol}</span>
+        </div>
         <button onClick={handleLogout} className="inicio-logout">Cerrar sesión</button>
       </div>
     </nav>
@@ -42,8 +49,8 @@ export default function App() {
     <BrowserRouter>
       <NavBar />
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/registro" element={<Registro />} />
+        <Route path="/login" element={<Auth />} />
+        <Route path="/registro" element={<Auth />} />
         <Route path="/" element={<RutaProtegida><Inicio /></RutaProtegida>} />
         <Route path="/talleres" element={<RutaProtegida><Talleres /></RutaProtegida>} />
         <Route path="/mis-inscripciones" element={<RutaProtegida><MisInscripciones /></RutaProtegida>} />

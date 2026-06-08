@@ -23,6 +23,27 @@ const getAll = async (req, res, next) => {
       },
       group: ['Taller.id']
     });
+
+    if (req.usuario) {
+      const tallerIds = talleres.map(t => t.id);
+      const misInscripciones = await Inscripcion.findAll({
+        where: {
+          usuario_id: req.usuario.id,
+          taller_id: { [Op.in]: tallerIds },
+          estado: { [Op.ne]: 'cancelada' }
+        },
+        attributes: ['taller_id']
+      });
+      const inscritoSet = new Set(misInscripciones.map(i => i.taller_id));
+      talleres.forEach(t => {
+        t.dataValues.ya_inscrito = inscritoSet.has(t.id);
+      });
+    } else {
+      talleres.forEach(t => {
+        t.dataValues.ya_inscrito = false;
+      });
+    }
+
     res.json(talleres);
   } catch (err) {
     next(err);
@@ -53,10 +74,15 @@ const create = async (req, res, next) => {
       return res.status(422).json({ error: true, message: 'fecha_inicio debe tener formato YYYY-MM-DD' });
     }
 
+    const cap = Number(capacidad_maxima);
+    if (capacidad_maxima !== undefined && (!Number.isInteger(cap) || cap < 1)) {
+      return res.status(422).json({ error: true, message: 'capacidad_maxima debe ser un número entero positivo' });
+    }
+
     const taller = await Taller.create({
       nombre: nombre.trim(),
       instructor: instructor.trim(),
-      capacidad_maxima: capacidad_maxima || 20,
+      capacidad_maxima: cap || 20,
       fecha_inicio,
       descripcion: descripcion || null
     });
@@ -78,6 +104,13 @@ const update = async (req, res, next) => {
     }
     if (fecha_inicio !== undefined && !fecha_inicio.match(/^\d{4}-\d{2}-\d{2}$/)) {
       return res.status(422).json({ error: true, message: 'fecha_inicio debe tener formato YYYY-MM-DD' });
+    }
+
+    if (capacidad_maxima !== undefined) {
+      const cap = Number(capacidad_maxima);
+      if (!Number.isInteger(cap) || cap < 1) {
+        return res.status(422).json({ error: true, message: 'capacidad_maxima debe ser un número entero positivo' });
+      }
     }
 
     const updates = {};
