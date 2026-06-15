@@ -1,5 +1,7 @@
 # Plataforma de Inscripción a Talleres
 
+**Deploy:** https://inscripcion-talleres.up.railway.app
+
 Aplicación web fullstack que permite a usuarios inscribirse en talleres y cursos disponibles, con roles diferenciados (admin/usuario).
 
 ## Stack tecnológico
@@ -118,6 +120,7 @@ Para crear un usuario admin, cambiar manualmente el rol en la BD o usar un seede
 |---------|-------------|
 | `npm run dev` | Inicia el backend con nodemon |
 | `npm start` | Inicia el backend en producción |
+| `npm run build` | Compila el frontend para producción (Vite) |
 | `npm run db:migrate` | Ejecuta migraciones pendientes |
 | `npm run db:migrate:undo` | Revierte todas las migraciones |
 | `npm run db:seed` | Puebla BD con datos demo (usuarios, talleres, inscripciones) |
@@ -168,6 +171,40 @@ Relaciones: Inscripcion pertenece a Taller **(N:1)** e Inscripcion pertenece a U
 | password | STRING(255) | Hash bcrypt |
 | rol | ENUM | admin / usuario |
 
+## Deploy en Railway
+
+La aplicación está desplegada en Railway como un **servicio único** que sirve tanto la API como el frontend compilado.
+
+### Arquitectura
+- **API + Frontend estático**: Express sirve `client/dist/` en producción
+- **Base de datos**: MySQL provisionado como addon de Railway
+- **Build automático**: `npm install` → `npm run build` (compila Vite) → `npm start` (migraciones + servidor)
+
+### Variables de entorno en Railway
+
+| Variable | Valor | Nota |
+|---|---|---|
+| `NODE_ENV` | `production` | Activa servir frontend estático |
+| `DATABASE_URL` | _(inyectada por Railway MySQL)_ | Conexión interna `mysql.railway.internal:3306` |
+| `JWT_SECRET` | _(aleatorio)_ | Clave para firmar tokens |
+| `CORS_ORIGIN` | `*` | Mismo dominio, no requiere CORS |
+| `VITE_API_URL` | `/api` | Ruta relativa al mismo servidor |
+
+### Acceder a MySQL desde exterior
+Railway expone `MYSQL_PUBLIC_URL` con la conexión pública:
+```
+mysql://root:<password>@<host>.proxy.rlwy.net:<puerto>/railway
+```
+Usar `--ssl-mode=REQUIRED` para conectar desde MySQL Workbench o CLI.
+
+### Comandos útiles
+
+| Comando | Descripción |
+|---|---|
+| `npm run build` | Compila el frontend (se ejecuta automáticamente en Railway) |
+| `npm start` | Corre migraciones + inicia servidor |
+| Redeploy | Railway → Deployments → Redeploy latest commit |
+
 ## Matriz de avance — Hito 3
 
 | ID | Título | Estado |
@@ -184,7 +221,7 @@ Relaciones: Inscripcion pertenece a Taller **(N:1)** e Inscripcion pertenece a U
 | GEN-10 | Validaciones de entrada | ✅ |
 | GEN-11 | Colección Postman | ✅ |
 | GEN-12 | Evolución de esquema | ✅ |
-| GEN-13 | Despliegue Railway | ❌ |
+| GEN-13 | Despliegue Railway | ✅ |
 | rq-01 | Modelar entidad principal (Taller) | ✅ |
 | rq-02 | Modelar entidad secundaria (Inscripcion) | ✅ |
 | rq-03 | CRUD del recurso principal (Talleres) | ✅ |
@@ -196,7 +233,7 @@ Relaciones: Inscripcion pertenece a Taller **(N:1)** e Inscripcion pertenece a U
 | rq-09 | Flujo transaccional: inscribir alumno | ✅ |
 | rq-10 | Funcionalidad avanzada (lista de espera) | ✅ |
 
-**Total: 22/23 requisitos (96%)**
+**Total: 23/23 requisitos (100%)**
 
 ## Estructura de carpetas
 ```
