@@ -749,3 +749,36 @@ td.tabla-hora {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.modal-eliminar {
+  text-align: center;
+  border-top-color: #ff6b6b;
+}
+
+.modal-eliminar h3 {
+  color: #ff6b6b;
+}
+
+.modal-eliminar-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 1rem 0 1.5rem;
+  line-height: 1.5;
+}
+
+.btn-eliminar-confirm {
+  padding: 0.7rem 1.75rem;
+  background: #4a1a1a;
+  color: #ff6b6b;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-eliminar-confirm:hover {
+  background: #6b2020;
+  color: #fff;
+}

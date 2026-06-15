@@ -40,6 +40,7 @@ export default function Talleres() {
   const [soloDisponibles, setSoloDisponibles] = useState(false);
   const [settings, setSettings] = useState(cargarSettings);
   const [dirty, setDirty] = useState(false);
+  const [eliminarConfirm, setEliminarConfirm] = useState(null);
 
   const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
   const esAdmin = usuario.rol === 'admin';
@@ -120,15 +121,24 @@ export default function Talleres() {
       imagen_url: taller.imagen_url || '',
       precio: taller.precio ?? ''
     });
+    setTimeout(() => {
+      document.querySelector('.talleres-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
   };
 
-  const handleEliminar = async (id) => {
-    if (!confirm('¿Eliminar este taller?')) return;
+  const handleEliminarClick = (id) => {
+    setEliminarConfirm(id);
+  };
+
+  const handleEliminarConfirm = async () => {
+    if (!eliminarConfirm) return;
     setError('');
     try {
-      await api.delete(`/talleres/${id}`);
+      await api.delete(`/talleres/${eliminarConfirm}`);
+      setEliminarConfirm(null);
       cargarTalleres();
     } catch (err) {
+      setEliminarConfirm(null);
       setError(err.response?.data?.message || err.response?.data?.error || 'Error al eliminar');
     }
   };
@@ -245,7 +255,20 @@ export default function Talleres() {
       <div className="talleres-header">
         <div className="talleres-header-left">
           <h2 className="talleres-titulo">Talleres</h2>
-          {esAdmin && (
+      {eliminarConfirm && (
+        <div className="modal-overlay" onClick={() => setEliminarConfirm(null)}>
+          <div className="modal-content modal-eliminar" onClick={e => e.stopPropagation()}>
+            <h3>Eliminar taller</h3>
+            <p className="modal-eliminar-desc">¿Estás seguro de que deseas eliminar este taller? Esta acci&oacute;n no se puede deshacer.</p>
+            <div className="talleres-botones">
+              <button onClick={handleEliminarConfirm} className="btn-eliminar-confirm">Eliminar</button>
+              <button onClick={() => setEliminarConfirm(null)} className="btn-cancelar">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {esAdmin && (
             <div className="admin-tabs">
               <button
                 className={`admin-tab ${adminTab === 'ver' ? 'active' : ''}`}
@@ -385,7 +408,7 @@ export default function Talleres() {
                   </td>
                   <td>
                     <button onClick={() => handleEditar(t)} className="btn-editar">Editar</button>
-                    <button onClick={() => handleEliminar(t.id)} className="btn-eliminar">Eliminar</button>
+                    <button onClick={() => handleEliminarClick(t.id)} className="btn-eliminar">Eliminar</button>
                   </td>
                 </tr>
               ))}
@@ -424,7 +447,7 @@ export default function Talleres() {
                   {esAdmin ? (
                     <>
                       <button onClick={() => handleEditar(t)} className="btn-editar">Editar</button>
-                      <button onClick={() => handleEliminar(t.id)} className="btn-eliminar">Eliminar</button>
+                      <button onClick={() => handleEliminarClick(t.id)} className="btn-eliminar">Eliminar</button>
                     </>
                   ) : (
                     <>
