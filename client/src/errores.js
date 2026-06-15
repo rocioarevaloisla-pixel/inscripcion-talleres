@@ -43,7 +43,8 @@ const mapa = {
 export function mensajeError(err) {
   if (!err) return 'Ocurrió un error inesperado';
 
-  const msg = err.response?.data?.error
+  const raw = err.response?.data?.error;
+  const msg = (typeof raw === 'string' ? raw : null)
     || err.response?.data?.message
     || err.message
     || '';
