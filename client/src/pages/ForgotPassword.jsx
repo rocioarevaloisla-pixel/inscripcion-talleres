@@ -21,7 +21,7 @@ export default function ForgotPassword() {
       const res = await api.post('/auth/forgot-password', { email });
       if (res.data.resetUrl) {
         const token = new URL(res.data.resetUrl).searchParams.get('token');
-        navigate('/restablecer?token=' + token);
+        navigate('/restablecer', { state: { token } });
         return;
       }
       setMensaje(res.data.mensaje);
