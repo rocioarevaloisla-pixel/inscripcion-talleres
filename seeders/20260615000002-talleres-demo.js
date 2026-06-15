@@ -1,6 +1,6 @@
 module.exports = {
   up: async (queryInterface) => {
-    await queryInterface.bulkInsert('talleres', [
+    const talleresData = [
       {
         nombre: 'Taller de Pintura al Óleo',
         descripcion: 'Aprende técnicas básicas de pintura al óleo: color, textura y composición.',
@@ -113,7 +113,15 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       }
-    ], {});
+    ];
+    for (const t of talleresData) {
+      const [existe] = await queryInterface.sequelize.query(
+        'SELECT id FROM talleres WHERE nombre = ?', { replacements: [t.nombre] }
+      );
+      if (existe.length === 0) {
+        await queryInterface.bulkInsert('talleres', [t], {});
+      }
+    }
   },
 
   down: async (queryInterface) => {
