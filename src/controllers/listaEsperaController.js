@@ -1,6 +1,7 @@
 const ListaEspera = require('../models/ListaEspera');
 const Taller = require('../models/Taller');
 const Inscripcion = require('../models/Inscripcion');
+const Usuario = require('../models/Usuario');
 const { Op } = require('sequelize');
 
 const create = async (req, res, next) => {
@@ -86,4 +87,20 @@ const cancel = async (req, res, next) => {
   }
 };
 
-module.exports = { create, getMisSolicitudes, cancel };
+const getAll = async (req, res, next) => {
+  try {
+    const solicitudes = await ListaEspera.findAll({
+      include: [
+        { model: Taller, attributes: ['nombre'] },
+        { model: Usuario, attributes: ['nombre', 'email'] }
+      ],
+      where: { estado: 'pendiente' },
+      order: [['fecha_solicitud', 'ASC']]
+    });
+    res.json(solicitudes);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { create, getMisSolicitudes, cancel, getAll };

@@ -12,6 +12,7 @@ module.exports = {
         hora_inicio: '10:00:00',
         hora_fin: '13:00:00',
         precio: 25000.00,
+        posicion: 1,
         estado: 'activo',
         createdAt: new Date(),
         updatedAt: new Date()
@@ -27,6 +28,7 @@ module.exports = {
         hora_inicio: '14:00:00',
         hora_fin: '17:00:00',
         precio: 35000.00,
+        posicion: 2,
         estado: 'activo',
         createdAt: new Date(),
         updatedAt: new Date()
@@ -42,6 +44,7 @@ module.exports = {
         hora_inicio: '09:00:00',
         hora_fin: '12:00:00',
         precio: null,
+        posicion: 3,
         estado: 'activo',
         createdAt: new Date(),
         updatedAt: new Date()
@@ -57,6 +60,7 @@ module.exports = {
         hora_inicio: '15:00:00',
         hora_fin: '18:00:00',
         precio: 15000.00,
+        posicion: 4,
         estado: 'activo',
         createdAt: new Date(),
         updatedAt: new Date()

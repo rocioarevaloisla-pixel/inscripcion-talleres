@@ -33,7 +33,7 @@ export default function Auth() {
       const res = await api.post('/auth/login', loginForm);
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('usuario', JSON.stringify(res.data.usuario));
-      navigate('/inicio');
+      navigate('/talleres');
     } catch (err) {
       setLoginError(err.response?.data?.error || 'Error al iniciar sesión');
     } finally {

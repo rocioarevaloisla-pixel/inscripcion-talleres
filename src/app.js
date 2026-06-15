@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -26,6 +27,14 @@ app.use('/api/talleres', verificarTokenOpcional, talleresRouter);
 app.use('/api/inscripciones', verificarToken, inscripcionesRouter);
 app.use('/api/estadisticas', verificarToken, estadisticasRouter);
 app.use('/api/lista-espera', verificarToken, listaEsperaRouter);
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/dist')));
+
+  app.get(/^\/(?!api).*/, (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+  });
+}
 
 app.use(notFoundHandler);
 app.use(errorHandler);

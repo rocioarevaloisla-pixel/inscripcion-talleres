@@ -13,33 +13,33 @@
   box-shadow: var(--shadow-lg);
   width: 100%;
   max-width: 420px;
-  border-top: 4px solid var(--persian-blue);
+  border-top: 4px solid var(--middle-purple);
 }
 
 .login-titulo {
   text-align: center;
   margin-bottom: 0.5rem;
-  color: var(--midnight-violet);
+  color: var(--queen-pink);
   font-size: 1.75rem;
   font-weight: 700;
 }
 
 .login-subtitulo {
   text-align: center;
-  color: var(--glaucous);
+  color: var(--old-lavender);
   font-size: 0.9rem;
   margin-bottom: 2rem;
 }
 
 .login-error {
-  background: var(--petal-frost);
-  color: var(--midnight-violet);
+  background: var(--queen-pink);
+  color: var(--jacarta);
   padding: 0.75rem 1rem;
   border-radius: var(--radius-sm);
   margin-bottom: 1.25rem;
   text-align: center;
   font-size: 0.9rem;
-  border-left: 3px solid var(--midnight-violet);
+  border-left: 3px solid var(--jacarta);
 }
 
 .login-campo {
@@ -52,7 +52,7 @@
 .login-campo label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--midnight-violet);
+  color: var(--text-primary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -60,16 +60,17 @@
 .login-campo input {
   padding: 0.75rem 1rem;
   border-radius: var(--radius-sm);
-  border: 2px solid var(--lavender);
+  border: 2px solid var(--queen-pink);
   font-size: 1rem;
   transition: border-color 0.2s;
-  background: #fafafa;
+  background: #1a1a1a;
+  color: var(--text-primary);
 }
 
 .login-campo input:focus {
   outline: none;
-  border-color: var(--persian-blue);
-  background: white;
+  border-color: var(--middle-purple);
+  background: #222;
 }
 
 .login-boton {
@@ -105,6 +106,6 @@
 }
 
 .login-link a {
-  color: var(--persian-blue);
+  color: var(--middle-purple);
   font-weight: 600;
 }

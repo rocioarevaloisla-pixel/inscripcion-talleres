@@ -24,7 +24,7 @@
 }
 
 .inicio-nav-links a {
-  color: var(--lavender);
+  color: var(--queen-pink);
   text-decoration: none;
   font-weight: 500;
   font-size: 0.95rem;
@@ -33,20 +33,22 @@
 }
 
 .inicio-nav-links a:hover {
-  color: var(--petal-frost);
+  color: white;
   text-decoration: none;
+  text-shadow: 0 0 8px rgba(255,255,255,0.3);
 }
 
 .inicio-nav-links a.active {
   color: white;
-  border-bottom: 2px solid var(--petal-frost);
+  border-bottom: 2px solid var(--queen-pink);
+  text-shadow: 0 0 8px rgba(255,255,255,0.2);
 }
 
 .inicio-usuario-badge {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  color: var(--lavender);
+  color: var(--queen-pink);
   font-size: 0.9rem;
 }
 
@@ -60,19 +62,19 @@
 }
 
 .inicio-rol-badge.admin {
-  background: var(--petal-frost);
-  color: var(--midnight-violet);
+  background: var(--queen-pink);
+  color: var(--jacarta);
 }
 
 .inicio-rol-badge.usuario {
-  background: var(--lavender);
-  color: var(--persian-blue);
+  background: var(--queen-pink);
+  color: var(--middle-purple);
 }
 
 .inicio-logout {
   padding: 0.45rem 1.1rem;
   background: white;
-  color: var(--midnight-violet);
+  color: var(--jacarta);
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -82,7 +84,7 @@
 }
 
 .inicio-logout:hover {
-  background: var(--petal-frost);
+  background: var(--queen-pink);
   transform: translateY(-1px);
 }
 
@@ -104,13 +106,13 @@
 .inicio-hero-content h1 {
   font-size: 2rem;
   font-weight: 800;
-  color: var(--midnight-violet);
+  color: var(--queen-pink);
   margin-bottom: 0.4rem;
   letter-spacing: -0.02em;
 }
 
 .inicio-hero-content h1 span {
-  color: var(--persian-blue);
+  color: var(--middle-purple);
 }
 
 .inicio-hero-content p {
@@ -133,19 +135,19 @@
   background: var(--card-bg);
   padding: 1.75rem 1.5rem;
   border-radius: var(--radius-lg);
-  box-shadow: 0 2px 12px rgba(77, 62, 163, 0.07);
+  box-shadow: var(--shadow-sm);
   text-align: center;
   transition: transform 0.25s, box-shadow 0.3s;
-  border-top: 3px solid var(--persian-blue);
+  border-top: 3px solid var(--middle-purple);
 }
 
 .inicio-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 28px rgba(77, 62, 163, 0.13);
+  box-shadow: var(--shadow-md);
 }
 
 .inicio-card.admin-card {
-  border-top-color: var(--midnight-violet);
+  border-top-color: var(--jacarta);
 }
 
 .inicio-card-icon {
@@ -154,7 +156,7 @@
 }
 
 .inicio-card h3 {
-  color: var(--midnight-violet);
+  color: var(--queen-pink);
   font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 0.35rem;
@@ -181,7 +183,7 @@
 .inicio-card a:hover {
   opacity: 0.9;
   transform: translateY(-1px);
-  box-shadow: 0 3px 10px rgba(77, 62, 163, 0.25);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
   color: white;
   text-decoration: none;
 }

@@ -43,6 +43,11 @@ const Taller = sequelize.define('Taller', {
     type: DataTypes.DECIMAL(12, 2),
     allowNull: true
   },
+  posicion: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    allowNull: false
+  },
   estado: {
     type: DataTypes.ENUM('activo', 'cerrado', 'cancelado'),
     defaultValue: 'activo'

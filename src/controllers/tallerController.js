@@ -21,7 +21,8 @@ const getAll = async (req, res, next) => {
           ]
         ]
       },
-      group: ['Taller.id']
+      group: ['Taller.id'],
+      order: [['posicion', 'ASC'], ['id', 'ASC']]
     });
 
     if (req.usuario) {
@@ -243,4 +244,24 @@ const remove = async (req, res, next) => {
   }
 };
 
-module.exports = { getAll, getById, create, update, remove };
+const reordenar = async (req, res, next) => {
+  try {
+    const { orden } = req.body;
+    if (!Array.isArray(orden) || orden.length === 0) {
+      return res.status(400).json({ error: true, message: 'orden debe ser un arreglo no vacío' });
+    }
+
+    for (const item of orden) {
+      if (!item.id || typeof item.posicion !== 'number') {
+        return res.status(400).json({ error: true, message: 'Cada item debe tener id y posicion' });
+      }
+      await Taller.update({ posicion: item.posicion }, { where: { id: item.id } });
+    }
+
+    res.json({ mensaje: 'Orden actualizado correctamente' });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getAll, getById, create, update, remove, reordenar };

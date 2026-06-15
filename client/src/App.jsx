@@ -33,7 +33,7 @@ function NavBar() {
 
   return (
     <nav className="inicio-nav">
-      <Link to="/inicio" className="inicio-marca" style={{ textDecoration: 'none' }}>
+      <Link to="/talleres" className="inicio-marca" style={{ textDecoration: 'none' }}>
         Wishdin
       </Link>
       <div className="inicio-nav-links">

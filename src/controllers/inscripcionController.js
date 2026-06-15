@@ -1,14 +1,18 @@
 const Inscripcion = require('../models/Inscripcion');
 const Taller = require('../models/Taller');
+const Usuario = require('../models/Usuario');
 const ListaEspera = require('../models/ListaEspera');
 const { Op } = require('sequelize');
 
 const getAll = async (req, res, next) => {
   try {
     const inscripciones = await Inscripcion.findAll({
+      where: { estado: { [Op.ne]: 'cancelada' } },
       include: [
-        { model: Taller, attributes: ['nombre', 'instructor', 'capacidad_maxima', 'estado'] }
-      ]
+        { model: Taller, attributes: ['nombre', 'instructor', 'capacidad_maxima', 'estado'] },
+        { model: Usuario, attributes: ['nombre', 'email', 'rol'] }
+      ],
+      order: [['fecha_inscripcion', 'DESC']]
     });
     res.json(inscripciones);
   } catch (err) {

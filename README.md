@@ -82,6 +82,7 @@ Para crear un usuario admin, cambiar manualmente el rol en la BD o usar un seede
 | GET | `/api/talleres/:id` | cualquiera | Detalle de un taller |
 | POST | `/api/talleres` | admin | Crear taller |
 | PUT | `/api/talleres/:id` | admin | Actualizar taller |
+| PUT | `/api/talleres/reordenar` | admin | Reordenar posición de talleres (drag & drop) |
 | DELETE | `/api/talleres/:id` | admin | Eliminar taller (sin inscripciones activas) |
 | GET | `/api/inscripciones` | admin | Listar todas las inscripciones |
 | GET | `/api/inscripciones/mis-inscripciones` | cualquiera | Inscripciones del usuario autenticado |

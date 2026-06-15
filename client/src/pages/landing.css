@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #faf9ff;
+  background: var(--bg);
 }
 
 .landing-nav {
@@ -10,8 +10,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  background: var(--gradient-primary);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -20,7 +20,7 @@
 .landing-logo {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #4D3EA3;
+  color: #fff;
   text-decoration: none;
   letter-spacing: -0.02em;
 }
@@ -37,21 +37,23 @@
   font-weight: 500;
   text-decoration: none;
   transition: all 0.2s;
-  color: #4D3EA3;
-  background: #E1DAFB;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .landing-nav-btn:hover {
-  background: #d0c7f0;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
 }
 
 .landing-nav-btn-primary {
-  color: #fff;
-  background: #4D3EA3;
+  color: var(--jacarta);
+  background: #fff;
 }
 
 .landing-nav-btn-primary:hover {
-  background: #3d2f8f;
+  background: var(--queen-pink);
+  color: var(--jacarta);
 }
 
 /* Hero */
@@ -62,13 +64,14 @@
   justify-content: center;
   padding: 5rem 2rem 4rem;
   text-align: center;
-  background: linear-gradient(180deg, #E1DAFB 0%, #faf9ff 100%);
+  background: var(--gradient-hero);
+  border-bottom: 1px solid rgba(111, 31, 59, 0.4);
 }
 
 .landing-hero h1 {
   font-size: 3rem;
   font-weight: 800;
-  color: #450C3F;
+  color: var(--queen-pink);
   letter-spacing: -0.03em;
   margin: 0 0 0.75rem;
   line-height: 1.1;
@@ -76,7 +79,7 @@
 
 .landing-hero p {
   font-size: 1.2rem;
-  color: #666;
+  color: var(--text-secondary);
   margin: 0 0 2rem;
   max-width: 480px;
 }
@@ -98,22 +101,26 @@
   text-decoration: none;
   transition: all 0.2s;
   color: #fff;
-  background: #4D3EA3;
+  background: var(--gradient-primary);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
 
 .landing-hero-btn:hover {
-  background: #3d2f8f;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  color: white;
 }
 
 .landing-hero-btn-secondary {
-  color: #4D3EA3;
-  background: #fff;
-  border: 2px solid #E1DAFB;
+  color: var(--queen-pink);
+  background: transparent;
+  border: 2px solid var(--old-lavender);
+  box-shadow: none;
 }
 
 .landing-hero-btn-secondary:hover {
-  background: #E1DAFB;
+  background: var(--jacarta);
+  box-shadow: none;
 }
 
 /* Talleres section */
@@ -128,7 +135,7 @@
 .landing-talleres h2 {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #450C3F;
+  color: var(--queen-pink);
   letter-spacing: -0.02em;
   margin: 0 0 2rem;
   text-align: center;
@@ -136,7 +143,7 @@
 
 .landing-vacio {
   text-align: center;
-  color: #999;
+  color: var(--text-secondary);
   padding: 3rem 0;
 }
 
@@ -144,7 +151,7 @@
   margin-top: auto;
   text-align: center;
   padding: 1.5rem;
-  color: #999;
+  color: var(--text-secondary);
   font-size: 0.85rem;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--old-lavender);
 }

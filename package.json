@@ -4,7 +4,8 @@
   "description": "Página web que permite a usuarios inscribirse en talleres y cursos disponibles.",
   "main": "index.js",
   "scripts": {
-    "start": "node src/app.js",
+    "build": "cd client && npm install && npm run build",
+    "start": "npx sequelize-cli db:migrate && node src/app.js",
     "dev": "nodemon src/app.js",
     "db:migrate": "sequelize-cli db:migrate",
     "db:migrate:undo": "sequelize-cli db:migrate:undo:all",

@@ -2,6 +2,7 @@
   padding: 2rem;
   max-width: var(--max-width);
   margin: 0 auto;
+  padding-bottom: 5rem;
 }
 
 .talleres-header {
@@ -21,7 +22,7 @@
 }
 
 .talleres-titulo {
-  color: var(--midnight-violet);
+  color: var(--queen-pink);
   font-size: 1.8rem;
   font-weight: 800;
 }
@@ -29,7 +30,7 @@
 .admin-tabs {
   display: flex;
   gap: 0.25rem;
-  background: var(--lavender);
+  background: var(--queen-pink);
   padding: 3px;
   border-radius: var(--radius-sm);
 }
@@ -37,7 +38,7 @@
 .admin-tab {
   padding: 0.45rem 1rem;
   background: transparent;
-  color: var(--persian-blue);
+  color: var(--middle-purple);
   border: none;
   border-radius: 4px;
   font-weight: 600;
@@ -48,12 +49,12 @@
 
 .admin-tab.active {
   background: var(--card-bg);
-  color: var(--midnight-violet);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  color: var(--queen-pink);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 .admin-tab:hover:not(.active) {
-  color: var(--midnight-violet);
+  color: var(--queen-pink);
 }
 
 .talleres-actions {
@@ -66,7 +67,7 @@
 .talleres-search {
   padding: 0.6rem 1rem 0.6rem 2.5rem;
   border-radius: var(--radius-sm);
-  border: 2px solid var(--lavender);
+  border: 2px solid var(--queen-pink);
   font-size: 0.9rem;
   background: var(--card-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23758AD1' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 0.75rem center;
   min-width: 220px;
@@ -75,14 +76,14 @@
 
 .talleres-search:focus {
   outline: none;
-  border-color: var(--persian-blue);
+  border-color: var(--middle-purple);
 }
 
 .talleres-filter-btn {
   padding: 0.6rem 1.2rem;
   background: var(--card-bg);
-  color: var(--persian-blue);
-  border: 2px solid var(--lavender);
+  color: var(--middle-purple);
+  border: 2px solid var(--queen-pink);
   border-radius: var(--radius-sm);
   font-weight: 600;
   font-size: 0.85rem;
@@ -90,32 +91,32 @@
 }
 
 .talleres-filter-btn.active {
-  background: var(--persian-blue);
+  background: var(--middle-purple);
   color: white;
-  border-color: var(--persian-blue);
+  border-color: var(--middle-purple);
 }
 
 .talleres-filter-btn:hover {
-  border-color: var(--persian-blue);
+  border-color: var(--middle-purple);
 }
 
 .talleres-error {
-  background: var(--petal-frost);
-  color: var(--midnight-violet);
+  background: var(--queen-pink);
+  color: var(--jacarta);
   padding: 0.75rem 1rem;
   border-radius: var(--radius-sm);
   margin-bottom: 1rem;
-  border-left: 3px solid var(--midnight-violet);
+  border-left: 3px solid var(--jacarta);
   font-size: 0.9rem;
 }
 
 .talleres-exito {
-  background: var(--lavender);
-  color: var(--persian-blue);
+  background: var(--queen-pink);
+  color: var(--middle-purple);
   padding: 0.75rem 1rem;
   border-radius: var(--radius-sm);
   margin-bottom: 1rem;
-  border-left: 3px solid var(--persian-blue);
+  border-left: 3px solid var(--middle-purple);
   font-size: 0.9rem;
 }
 
@@ -126,12 +127,12 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   margin-bottom: 1.75rem;
-  border-top: 3px solid var(--lavender);
+  border-top: 3px solid var(--queen-pink);
 }
 
 .talleres-card h3 {
   margin-bottom: 1.25rem;
-  color: var(--midnight-violet);
+  color: var(--queen-pink);
   font-size: 1.1rem;
   font-weight: 700;
 }
@@ -147,18 +148,19 @@
 .talleres-select {
   padding: 0.75rem 1rem;
   border-radius: var(--radius-sm);
-  border: 2px solid var(--lavender);
+  border: 2px solid var(--queen-pink);
   font-size: 0.95rem;
   transition: border-color 0.2s;
-  background: #fafafa;
+  background: #1a1a1a;
+  color: var(--text-primary);
 }
 
 .talleres-form input:focus,
 .talleres-form textarea:focus,
 .talleres-select:focus {
   outline: none;
-  border-color: var(--persian-blue);
-  background: white;
+  border-color: var(--middle-purple);
+  background: #222;
 }
 
 .talleres-form textarea {
@@ -178,7 +180,7 @@
 .talleres-horario-row label {
   display: block;
   font-size: 0.8rem;
-  color: #666;
+  color: var(--text-secondary);
   margin-bottom: 0.25rem;
 }
 
@@ -193,7 +195,7 @@ td.tabla-fecha {
 }
 
 td.tabla-hora {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 0.85rem;
   white-space: nowrap;
 }
@@ -201,8 +203,8 @@ td.tabla-hora {
 .taller-card-precio {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--persian-blue);
-  background: var(--lavender);
+  color: var(--middle-purple);
+  background: var(--queen-pink);
   padding: 0.15rem 0.5rem;
   border-radius: 999px;
   display: inline-block;
@@ -237,8 +239,8 @@ td.tabla-hora {
 
 .btn-cancelar {
   padding: 0.7rem 1.75rem;
-  background: var(--lavender);
-  color: var(--persian-blue);
+  background: var(--queen-pink);
+  color: var(--middle-purple);
   border: none;
   border-radius: var(--radius-sm);
   font-weight: 600;
@@ -247,7 +249,8 @@ td.tabla-hora {
 }
 
 .btn-cancelar:hover {
-  background: #d0c8f7;
+  background: var(--old-lavender);
+  color: #fff;
 }
 
 /* === ADMIN: tabla === */
@@ -272,13 +275,13 @@ td.tabla-hora {
 
 .talleres-tabla td {
   padding: 0.85rem 1rem;
-  border-bottom: 1px solid var(--lavender);
+  border-bottom: 1px solid var(--queen-pink);
   font-size: 0.9rem;
   color: var(--text-primary);
 }
 
 .talleres-tabla tbody tr:hover {
-  background: #f3f0fb;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .tabla-imagen {
@@ -290,35 +293,44 @@ td.tabla-hora {
 }
 
 .tabla-imagen-placeholder {
-  color: var(--glaucous);
+  color: var(--old-lavender);
   font-size: 0.85rem;
 }
 
 /* === USUARIO: grid de cards tipo Crehana === */
 .talleres-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
 }
 
 .taller-card {
   background: var(--card-bg);
-  border-radius: var(--radius-md);
-  box-shadow: 0 2px 8px rgba(77, 62, 163, 0.06);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
   transition: transform 0.3s, box-shadow 0.3s;
   display: flex;
   flex-direction: column;
+  position: relative;
+  border: 1px solid rgba(111, 31, 59, 0.25);
+}
+
+.taller-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--jacarta), var(--middle-purple));
+  z-index: 1;
 }
 
 .taller-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 40px rgba(77, 62, 163, 0.12);
+  box-shadow: var(--shadow-lg);
 }
 
 .taller-card-header {
-  height: 160px;
-  background: linear-gradient(135deg, var(--midnight-violet), var(--persian-blue), var(--glaucous));
+  background: linear-gradient(135deg, var(--jacarta), var(--middle-purple), var(--old-lavender));
   position: relative;
   display: flex;
   align-items: flex-end;
@@ -358,14 +370,13 @@ td.tabla-hora {
 }
 
 .taller-card-body {
-  padding: 1.25rem 1.5rem 0;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
 .taller-card h4 {
-  color: var(--midnight-violet);
+  color: var(--queen-pink);
   font-size: 1.15rem;
   font-weight: 800;
   margin-bottom: 0.35rem;
@@ -374,7 +385,7 @@ td.tabla-hora {
 }
 
 .taller-card-instructor {
-  color: var(--glaucous);
+  color: var(--text-secondary);
   font-size: 0.82rem;
   margin-bottom: 0.75rem;
   font-weight: 500;
@@ -406,19 +417,18 @@ td.tabla-hora {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  background: #f5f3fb;
+  background: #1a1a1a;
   padding: 0.25rem 0.6rem;
   border-radius: 4px;
   font-size: 0.78rem;
 }
 
 .taller-card-footer {
-  padding: 1rem 1.5rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 0.75rem;
-  border-top: 1px solid #f0eef8;
+  border-top: 1px solid var(--old-lavender);
 }
 
 /* === Badges === */
@@ -427,8 +437,8 @@ td.tabla-hora {
   border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 700;
-  background: var(--lavender);
-  color: var(--persian-blue);
+  background: var(--queen-pink);
+  color: var(--middle-purple);
   letter-spacing: 0.03em;
 }
 
@@ -437,8 +447,8 @@ td.tabla-hora {
   border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 700;
-  background: var(--petal-frost);
-  color: var(--midnight-violet);
+  background: var(--queen-pink);
+  color: var(--jacarta);
   letter-spacing: 0.03em;
 }
 
@@ -447,8 +457,8 @@ td.tabla-hora {
   border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 700;
-  background: #fef3c7;
-  color: #92400e;
+  background: #3a3a00;
+  color: #ffd700;
 }
 
 .badge-cupo-si {
@@ -456,10 +466,10 @@ td.tabla-hora {
   border-radius: 999px;
   font-size: 0.72rem;
   font-weight: 700;
-  background: rgba(255, 255, 255, 0.9);
-  color: #0a6b3e;
+  background: rgba(0, 0, 0, 0.6);
+  color: #4ade80;
   letter-spacing: 0.03em;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
 
 .badge-cupo-no {
@@ -467,10 +477,10 @@ td.tabla-hora {
   border-radius: 999px;
   font-size: 0.72rem;
   font-weight: 700;
-  background: rgba(255, 255, 255, 0.9);
-  color: #b91c1c;
+  background: rgba(0, 0, 0, 0.6);
+  color: #ff6b6b;
   letter-spacing: 0.03em;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
 
 .badge-ya-inscrito {
@@ -478,18 +488,18 @@ td.tabla-hora {
   border-radius: 999px;
   font-size: 0.72rem;
   font-weight: 700;
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--persian-blue);
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--queen-pink);
   letter-spacing: 0.03em;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
 
 /* === Botones de acción === */
 .btn-editar {
   margin-right: 0.5rem;
   padding: 0.35rem 0.85rem;
-  background: var(--lavender);
-  color: var(--persian-blue);
+  background: var(--queen-pink);
+  color: var(--middle-purple);
   border: none;
   border-radius: var(--radius-sm);
   font-weight: 600;
@@ -498,13 +508,14 @@ td.tabla-hora {
 }
 
 .btn-editar:hover {
-  background: #d0c8f7;
+  background: var(--old-lavender);
+  color: #fff;
 }
 
 .btn-eliminar {
   padding: 0.35rem 0.85rem;
-  background: var(--petal-frost);
-  color: var(--midnight-violet);
+  background: var(--queen-pink);
+  color: var(--jacarta);
   border: none;
   border-radius: var(--radius-sm);
   font-weight: 600;
@@ -513,7 +524,8 @@ td.tabla-hora {
 }
 
 .btn-eliminar:hover {
-  background: #f5b8e8;
+  background: var(--brown-chocolate);
+  color: white;
 }
 
 .btn-inscribir {
@@ -534,7 +546,7 @@ td.tabla-hora {
 .btn-inscribir:hover {
   opacity: 0.92;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(77, 62, 163, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .btn-inscribir:active {
@@ -546,18 +558,18 @@ td.tabla-hora {
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
-  background: #b0b0c0;
+  background: #444;
 }
 
 .btn-inscrito {
   opacity: 1 !important;
-  background: var(--lavender) !important;
-  color: var(--persian-blue) !important;
+  background: var(--queen-pink) !important;
+  color: var(--middle-purple) !important;
   cursor: not-allowed;
 }
 
 .talleres-vacio {
-  color: var(--glaucous);
+  color: var(--old-lavender);
   font-style: italic;
   text-align: center;
   padding: 3rem 0;
@@ -577,7 +589,7 @@ td.tabla-hora {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(69, 12, 63, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -593,12 +605,12 @@ td.tabla-hora {
   max-width: 450px;
   width: 90%;
   box-shadow: var(--shadow-lg);
-  border-top: 4px solid var(--persian-blue);
+  border-top: 4px solid var(--middle-purple);
   animation: slideUp 0.25s ease;
 }
 
 .modal-content h3 {
-  color: var(--midnight-violet);
+  color: var(--queen-pink);
   font-size: 1.2rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
@@ -611,7 +623,7 @@ td.tabla-hora {
 .btn-cancelar-inscripcion {
   padding: 0.35rem 0.75rem;
   border: 1px solid #e74c3c;
-  background: #fff;
+  background: transparent;
   color: #e74c3c;
   border-radius: 6px;
   font-size: 0.8rem;
@@ -626,9 +638,9 @@ td.tabla-hora {
 
 .btn-espera {
   padding: 0.5rem 1rem;
-  border: 1px dashed var(--glaucous);
+  border: 1px dashed var(--old-lavender);
   background: transparent;
-  color: var(--glaucous);
+  color: var(--old-lavender);
   border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 600;
@@ -637,8 +649,92 @@ td.tabla-hora {
 }
 
 .btn-espera:hover {
-  background: var(--lavender);
+  background: var(--queen-pink);
   border-style: solid;
+}
+
+/* Tamaños de cards */
+.talleres-grid {
+  --card-min-width: 300px;
+  --card-img-height: 160px;
+  --card-padding-y: 1.25rem;
+  --card-padding-x: 1.5rem;
+  --card-title-size: 1.15rem;
+  --card-instructor-size: 0.82rem;
+  --card-desc-size: 0.85rem;
+  --card-meta-size: 0.78rem;
+  --card-gap: 1.5rem;
+  --card-radius: var(--radius-md);
+  --card-footer-py: 1rem;
+  --card-header-height: 160px;
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-min-width), 1fr));
+  gap: var(--card-gap);
+}
+
+.talleres-grid.card-peq {
+  --card-min-width: 230px;
+  --card-img-height: 110px;
+  --card-padding-y: 0.75rem;
+  --card-padding-x: 1rem;
+  --card-title-size: 0.95rem;
+  --card-instructor-size: 0.75rem;
+  --card-desc-size: 0.78rem;
+  --card-meta-size: 0.7rem;
+  --card-gap: 1rem;
+  --card-radius: 10px;
+  --card-footer-py: 0.7rem;
+  --card-header-height: 110px;
+}
+
+.talleres-grid.card-gde {
+  --card-min-width: 380px;
+  --card-img-height: 210px;
+  --card-padding-y: 1.5rem;
+  --card-padding-x: 2rem;
+  --card-title-size: 1.35rem;
+  --card-instructor-size: 0.9rem;
+  --card-desc-size: 0.95rem;
+  --card-meta-size: 0.85rem;
+  --card-gap: 2rem;
+  --card-radius: 16px;
+  --card-footer-py: 1.25rem;
+  --card-header-height: 210px;
+}
+
+.taller-card {
+  border-radius: var(--card-radius);
+}
+
+.taller-card-header {
+  height: var(--card-header-height);
+}
+
+.taller-card-body {
+  padding: var(--card-padding-y) var(--card-padding-x) 0;
+}
+
+.taller-card h4 {
+  font-size: var(--card-title-size);
+}
+
+.taller-card-instructor {
+  font-size: var(--card-instructor-size);
+}
+
+.taller-card-desc {
+  font-size: var(--card-desc-size);
+}
+
+.taller-card-meta {
+  font-size: var(--card-meta-size);
+}
+
+.taller-card-meta span {
+  font-size: var(--card-meta-size);
+}
+
+.taller-card-footer {
+  padding: var(--card-footer-py) var(--card-padding-x);
 }
 
 @keyframes fadeIn {

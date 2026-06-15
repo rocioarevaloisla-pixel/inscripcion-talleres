@@ -1,6 +1,30 @@
 import { useState, useEffect } from 'react';
 import api from '../api';
+import TalleresPanel from '../components/TalleresPanel';
 import './talleres.css';
+
+const SETTINGS_KEY = 'talleres-settings';
+const settingsDefault = {
+  vista: 'grid',
+  tamano: 'med',
+  soloActivos: true,
+  soloConCupo: false,
+  soloGratis: false,
+  orden: 'default'
+};
+
+function cargarSettings() {
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    return raw ? { ...settingsDefault, ...JSON.parse(raw) } : settingsDefault;
+  } catch {
+    return settingsDefault;
+  }
+}
+
+function guardarSettings(s) {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+}
 
 export default function Talleres() {
   const [talleres, setTalleres] = useState([]);
@@ -14,6 +38,8 @@ export default function Talleres() {
   const [exito, setExito] = useState('');
   const [busqueda, setBusqueda] = useState('');
   const [soloDisponibles, setSoloDisponibles] = useState(false);
+  const [settings, setSettings] = useState(cargarSettings);
+  const [dirty, setDirty] = useState(false);
 
   const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
   const esAdmin = usuario.rol === 'admin';
@@ -168,14 +194,51 @@ export default function Talleres() {
     }
   };
 
-  const talleresFiltrados = talleres.filter(t => {
+  const handleSettingsChange = (s) => {
+    setSettings(s);
+    guardarSettings(s);
+    setDirty(true);
+  };
+
+  const guardarCambios = () => {
+    guardarSettings(settings);
+    setDirty(false);
+    setExito('Cambios guardados exitosamente');
+  };
+
+  const ordenarTalleres = (lista) => {
+    const ordenada = [...lista];
+    switch (settings.orden) {
+      case 'nombre-asc':
+        ordenada.sort((a, b) => a.nombre.localeCompare(b.nombre));
+        break;
+      case 'nombre-desc':
+        ordenada.sort((a, b) => b.nombre.localeCompare(a.nombre));
+        break;
+      case 'reciente':
+        ordenada.sort((a, b) => new Date(b.fecha_inicio) - new Date(a.fecha_inicio));
+        break;
+      default:
+        break;
+    }
+    return ordenada;
+  };
+
+  let talleresFiltrados = talleres.filter(t => {
     const coincideBusqueda = !busqueda ||
       t.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
       t.instructor.toLowerCase().includes(busqueda.toLowerCase());
     if (!coincideBusqueda) return false;
     if (soloDisponibles && !tieneCupo(t)) return false;
+    if (settings.soloActivos && t.estado !== 'activo') return false;
+    if (settings.soloConCupo && !tieneCupo(t)) return false;
+    if (settings.soloGratis && t.precio != null) return false;
     return true;
   });
+
+  talleresFiltrados = ordenarTalleres(talleresFiltrados);
+
+  const tamanoClass = settings.tamano === 'peq' ? 'card-peq' : settings.tamano === 'gde' ? 'card-gde' : '';
 
   return (
     <div className="talleres-container">
@@ -277,13 +340,12 @@ export default function Talleres() {
       ) : talleresFiltrados.length === 0 ? (
         <div className="talleres-card">
           <p className="talleres-vacio">
-            {busqueda || soloDisponibles
+            {busqueda || soloDisponibles || settings.soloActivos || settings.soloConCupo || settings.soloGratis
               ? 'No se encontraron talleres con los filtros actuales.'
               : 'No hay talleres registrados aún.'}
           </p>
         </div>
-      ) : esAdmin && adminTab === 'ver' ? (
-        /* Vista admin: tabla */
+      ) : esAdmin && adminTab === 'ver' && settings.vista === 'lista' ? (
         <div className="talleres-card">
           <table className="talleres-tabla">
             <thead>
@@ -331,8 +393,7 @@ export default function Talleres() {
           </table>
         </div>
       ) : (
-        /* Vista usuario: grid de cards */
-        <div className="talleres-grid">
+        <div className={`talleres-grid ${tamanoClass}`}>
           {talleresFiltrados.map(t => {
             const disponible = tieneCupo(t) && !t.ya_inscrito;
             return (
@@ -359,28 +420,37 @@ export default function Talleres() {
                     {t.precio != null && <span className="taller-card-precio">💰 ${Number(t.precio).toLocaleString('es-CL')}</span>}
                   </div>
                 </div>
-                  <div className="taller-card-footer">
-                    <span className={t.estado === 'activo' ? 'badge-activo' : 'badge-inactivo'}>
-                      {t.estado}
-                    </span>
-                    {t.ya_inscrito ? (
-                      <button className="btn-inscribir btn-inscrito" disabled>
-                        Ya inscrito
-                      </button>
-                    ) : !tieneCupo(t) && t.estado === 'activo' ? (
-                      <button onClick={() => handleListaEspera(t)} className="btn-espera">
-                        Unirme a lista de espera
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => abrirInscripcion(t)}
-                        className="btn-inscribir"
-                        disabled={!disponible || t.estado !== 'activo'}
-                      >
-                        Inscribirme
-                      </button>
-                    )}
-                  </div>
+                <div className="taller-card-footer">
+                  {esAdmin ? (
+                    <>
+                      <button onClick={() => handleEditar(t)} className="btn-editar">✏️ Editar</button>
+                      <button onClick={() => handleEliminar(t.id)} className="btn-eliminar">🗑️ Eliminar</button>
+                    </>
+                  ) : (
+                    <>
+                      <span className={t.estado === 'activo' ? 'badge-activo' : 'badge-inactivo'}>
+                        {t.estado}
+                      </span>
+                      {t.ya_inscrito ? (
+                        <button className="btn-inscribir btn-inscrito" disabled>
+                          Ya inscrito
+                        </button>
+                      ) : !tieneCupo(t) && t.estado === 'activo' ? (
+                        <button onClick={() => handleListaEspera(t)} className="btn-espera">
+                          Unirme a lista de espera
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => abrirInscripcion(t)}
+                          className="btn-inscribir"
+                          disabled={!disponible || t.estado !== 'activo'}
+                        >
+                          Inscribirme
+                        </button>
+                      )}
+                    </>
+                  )}
+                </div>
               </div>
             );
           })}
@@ -404,6 +474,15 @@ export default function Talleres() {
             </form>
           </div>
         </div>
+      )}
+
+      {esAdmin && (
+        <TalleresPanel
+          settings={settings}
+          onChange={handleSettingsChange}
+          dirty={dirty}
+          onGuardar={guardarCambios}
+        />
       )}
     </div>
   );
