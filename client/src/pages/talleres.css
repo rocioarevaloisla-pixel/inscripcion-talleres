@@ -363,10 +363,12 @@ td.tabla-hora {
 }
 
 .taller-card-header .badge-cupo-si,
-.taller-card-header .badge-cupo-no {
+.taller-card-header .badge-cupo-no,
+.taller-card-header .badge-ya-inscrito {
   position: absolute;
-  bottom: -12px;
-  left: 1.25rem;
+  bottom: 0.75rem;
+  left: 0.75rem;
+  z-index: 2;
 }
 
 .taller-card-body {
@@ -437,8 +439,8 @@ td.tabla-hora {
   border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 700;
-  background: var(--queen-pink);
-  color: var(--middle-purple);
+  background: #1a4a2a;
+  color: #4ade80;
   letter-spacing: 0.03em;
 }
 
@@ -447,8 +449,8 @@ td.tabla-hora {
   border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 700;
-  background: var(--queen-pink);
-  color: var(--jacarta);
+  background: #4a1a1a;
+  color: #ff6b6b;
   letter-spacing: 0.03em;
 }
 
