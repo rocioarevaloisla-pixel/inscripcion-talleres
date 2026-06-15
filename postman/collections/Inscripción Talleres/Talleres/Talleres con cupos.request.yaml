@@ -1,4 +1,0 @@
-$kind: http-request
-url: "{{baseUrl}}/talleres/con-cupos"
-method: GET
-order: 3000

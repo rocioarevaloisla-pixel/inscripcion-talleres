@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api';
+import ConfirmModal from '../components/ConfirmModal';
+import { mensajeError } from '../errores';
 import './talleres.css';
 
 export default function MisInscripciones() {
@@ -9,6 +11,7 @@ export default function MisInscripciones() {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
   const [exito, setExito] = useState('');
+  const [confirm, setConfirm] = useState(null);
 
   const cargar = async () => {
     setError('');
@@ -19,8 +22,8 @@ export default function MisInscripciones() {
       ]);
       setInscripciones(inscRes.data);
       setSolicitudes(esperaRes.data);
-    } catch {
-      setError('Error al cargar datos');
+    } catch (err) {
+      setError(mensajeError(err));
     } finally {
       setCargando(false);
     }
@@ -33,8 +36,9 @@ export default function MisInscripciones() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleCancelar = async (id) => {
-    if (!confirm('¿Cancelar esta inscripción? Si hay lista de espera, el cupo se asignará al siguiente.')) return;
+  const confirmarCancelar = async (id) => {
+    if (!confirm) return;
+    setConfirm(null);
     setError('');
     setExito('');
     try {
@@ -44,12 +48,13 @@ export default function MisInscripciones() {
         : 'Inscripción cancelada.');
       cargar();
     } catch (err) {
-      setError(err.response?.data?.message || err.response?.data?.error || 'Error al cancelar');
+      setError(mensajeError(err));
     }
   };
 
-  const handleCancelarEspera = async (id) => {
-    if (!confirm('¿Cancelar tu solicitud de lista de espera?')) return;
+  const confirmarCancelarEspera = async (id) => {
+    if (!confirm) return;
+    setConfirm(null);
     setError('');
     setExito('');
     try {
@@ -57,8 +62,19 @@ export default function MisInscripciones() {
       setExito('Solicitud de lista de espera cancelada');
       cargar();
     } catch (err) {
-      setError(err.response?.data?.message || err.response?.data?.error || 'Error al cancelar');
+      setError(mensajeError(err));
     }
+  };
+
+  const pedirConfirmacion = (tipo, id, nombreTaller) => {
+    setConfirm({
+      tipo,
+      id,
+      nombreTaller,
+      mensaje: tipo === 'inscripcion'
+        ? 'Cancelar inscripción a'
+        : 'Cancelar solicitud de lista de espera de'
+    });
   };
 
   const estadoBadge = (estado) => {
@@ -111,7 +127,7 @@ export default function MisInscripciones() {
                           <span className={estadoBadge(insc.estado)}>{insc.estado}</span>
                         </td>
                         <td>
-                          <button onClick={() => handleCancelar(insc.id)} className="btn-cancelar-inscripcion">
+                          <button onClick={() => pedirConfirmacion('inscripcion', insc.id, t?.nombre)} className="btn-cancelar-inscripcion">
                             Cancelar
                           </button>
                         </td>
@@ -142,7 +158,7 @@ export default function MisInscripciones() {
                       <td>{new Date(sol.fecha_solicitud).toLocaleDateString()}</td>
                       <td><span className="badge-pendiente">Esperando cupo</span></td>
                       <td>
-                        <button onClick={() => handleCancelarEspera(sol.id)} className="btn-cancelar-inscripcion">
+                        <button onClick={() => pedirConfirmacion('espera', sol.id, sol.Taller?.nombre)} className="btn-cancelar-inscripcion">
                           Cancelar solicitud
                         </button>
                       </td>
@@ -153,6 +169,18 @@ export default function MisInscripciones() {
             </div>
           )}
         </>
+      )}
+
+      {confirm && (
+        <ConfirmModal
+          mensaje={confirm.mensaje}
+          nombreTaller={confirm.nombreTaller}
+          onConfirm={() => confirm.tipo === 'inscripcion'
+            ? confirmarCancelar(confirm.id)
+            : confirmarCancelarEspera(confirm.id)
+          }
+          onCancel={() => setConfirm(null)}
+        />
       )}
     </div>
   );

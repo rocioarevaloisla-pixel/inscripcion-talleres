@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../api';
+import { mensajeError } from '../errores';
 import './auth.css';
 
 export default function ForgotPassword() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
@@ -17,10 +19,15 @@ export default function ForgotPassword() {
     setMensaje('');
     try {
       const res = await api.post('/auth/forgot-password', { email });
+      if (res.data.resetUrl) {
+        const token = new URL(res.data.resetUrl).searchParams.get('token');
+        navigate('/restablecer?token=' + token);
+        return;
+      }
       setMensaje(res.data.mensaje);
       setEnviado(true);
     } catch (err) {
-      setError(err.response?.data?.error || 'Error al solicitar restablecimiento');
+      setError(mensajeError(err));
     } finally {
       setCargando(false);
     }
@@ -53,7 +60,7 @@ export default function ForgotPassword() {
           <div className="forgot-exito-contenido">
             <p className="auth-exito" style={{ width: 'auto', margin: '0 auto 1rem' }}>{mensaje}</p>
             <div className="forgot-dev-box">
-              <strong>🔧 Modo desarrollo</strong>
+              <strong>Modo desarrollo</strong>
               <p>El email se envió a <strong>{email}</strong> vía Ethereal.</p>
               <p>Revisa la <strong>terminal del servidor</strong> para ver la URL de vista previa del email.</p>
             </div>

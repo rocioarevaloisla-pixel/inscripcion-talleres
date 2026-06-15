@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { getConfig, updateConfig } = require('../controllers/configuracionController');
-const { verificarAdmin } = require('../middlewares/auth');
+const { verificarToken, verificarAdmin } = require('../middlewares/auth');
 
 router.get('/', getConfig);
-router.put('/', verificarAdmin, updateConfig);
+router.put('/', verificarToken, verificarAdmin, updateConfig);
 
 module.exports = router;

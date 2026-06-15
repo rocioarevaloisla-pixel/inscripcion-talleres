@@ -1,5 +1,5 @@
 $kind: http-request
-url: "{{baseUrl}}/lista-espera"
+url: "{{baseUrl}}/lista-espera/mis-solicitudes"
 method: GET
 headers:
   Authorization: Bearer {{token}}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../api';
+import { mensajeError } from '../errores';
 import './login.css';
 
 export default function Login() {
@@ -23,7 +24,7 @@ export default function Login() {
       localStorage.setItem('usuario', JSON.stringify(res.data.usuario));
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.error || 'Error al iniciar sesión');
+      setError(mensajeError(err));
     } finally {
       setCargando(false);
     }

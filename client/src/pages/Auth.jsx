@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api';
+import { mensajeError } from '../errores';
 import './auth.css';
 
 export default function Auth() {
@@ -35,7 +36,7 @@ export default function Auth() {
       localStorage.setItem('usuario', JSON.stringify(res.data.usuario));
       navigate('/talleres');
     } catch (err) {
-      setLoginError(err.response?.data?.error || 'Error al iniciar sesión');
+      setLoginError(mensajeError(err));
     } finally {
       setLoginCargando(false);
     }
@@ -50,7 +51,7 @@ export default function Auth() {
       setRegExito('Cuenta creada exitosamente');
       setTimeout(() => setShowSignup(false), 1200);
     } catch (err) {
-      setRegError(err.response?.data?.error || 'Error al registrarse');
+      setRegError(mensajeError(err));
     } finally {
       setRegCargando(false);
     }

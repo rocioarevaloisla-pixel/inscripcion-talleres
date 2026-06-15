@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../api';
+import { mensajeError } from '../errores';
 import './registro.css';
 
 export default function Registro() {
@@ -21,7 +22,7 @@ export default function Registro() {
       await api.post('/auth/registro', form);
       navigate('/login');
     } catch (err) {
-      setError(err.response?.data?.error || 'Error al registrarse');
+      setError(mensajeError(err));
     } finally {
       setCargando(false);
     }

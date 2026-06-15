@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api';
 import TalleresPanel from '../components/TalleresPanel';
+import ConfirmModal from '../components/ConfirmModal';
+import { mensajeError } from '../errores';
 import './talleres.css';
 
 const SETTINGS_KEY = 'talleres-settings';
@@ -70,8 +72,8 @@ export default function Talleres() {
         setTotalPages(res.data.totalPages);
       }
       setPage(pagina);
-    } catch {
-      setError('Error al cargar talleres');
+    } catch (err) {
+      setError(mensajeError(err));
     } finally {
       setCargando(false);
       setCargandoMas(false);
@@ -79,7 +81,23 @@ export default function Talleres() {
   };
 
   useEffect(() => {
-    cargarTalleres(1);
+    (async () => {
+      try {
+        const res = await api.get('/talleres?page=1&limit=12');
+        if (Array.isArray(res.data)) {
+          setTalleres(res.data);
+          setTotalPages(1);
+        } else {
+          setTalleres(res.data.talleres);
+          setTotalPages(res.data.totalPages);
+        }
+        setPage(1);
+      } catch {
+        setError('Error al cargar talleres');
+      } finally {
+        setCargando(false);
+      }
+    })();
   }, []);
 
   useEffect(() => {
@@ -107,7 +125,7 @@ export default function Talleres() {
         const res = await api.get('/configuracion-visual');
         setSettings(res.data);
         guardarSettings(res.data);
-      } catch {}
+      } catch { /* ignore */ }
     }, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -123,6 +141,25 @@ export default function Talleres() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const fechaInicio = new Date(form.fecha_inicio + 'T00:00:00');
+    const fechaFin = new Date(form.fecha_fin + 'T00:00:00');
+
+    if (fechaInicio < hoy) {
+      setError('La fecha de inicio no puede ser anterior a hoy');
+      return;
+    }
+    if (fechaInicio.getFullYear() > 2026) {
+      setError('La fecha de inicio no puede ser más allá de 2026');
+      return;
+    }
+    if (fechaFin < fechaInicio) {
+      setError('La fecha de fin no puede ser anterior a la fecha de inicio');
+      return;
+    }
+
     try {
       if (editando) {
         await api.put(`/talleres/${editando}`, form);
@@ -134,7 +171,7 @@ export default function Talleres() {
       setAdminTab('ver');
       cargarTalleres();
     } catch (err) {
-      setError(err.response?.data?.message || err.response?.data?.error || 'Error al guardar');
+      setError(mensajeError(err));
     }
   };
 
@@ -178,7 +215,7 @@ export default function Talleres() {
       cargarTalleres();
     } catch (err) {
       setEliminarConfirm(null);
-      setError(err.response?.data?.message || err.response?.data?.error || 'Error al eliminar');
+      setError(mensajeError(err));
     }
   };
 
@@ -213,13 +250,13 @@ export default function Talleres() {
       cerrarInscripcion();
       cargarTalleres();
     } catch (err) {
-      setError(err.response?.data?.message || err.response?.data?.error || 'Error al inscribirse');
+      setError(mensajeError(err));
     }
   };
 
   const formatearRango = (t) => {
-    const [y1, m1, d1] = (t.fecha_inicio || '').split('-');
-    const [y2, m2, d2] = (t.fecha_fin || t.fecha_inicio || '').split('-');
+    const [, m1, d1] = (t.fecha_inicio || '').split('-');
+    const [, m2, d2] = (t.fecha_fin || t.fecha_inicio || '').split('-');
     const fecha = t.fecha_inicio === t.fecha_fin || !t.fecha_fin
       ? `${d1}/${m1}`
       : `${d1}/${m1} — ${d2}/${m2}`;
@@ -243,7 +280,7 @@ export default function Talleres() {
       setExito('Te has añadido a la lista de espera');
       cargarTalleres();
     } catch (err) {
-      setError(err.response?.data?.message || err.response?.data?.error || 'Error al solicitar lista de espera');
+      setError(mensajeError(err));
     }
   };
 
@@ -306,17 +343,14 @@ export default function Talleres() {
       <div className="talleres-header">
         <div className="talleres-header-left">
           <h2 className="talleres-titulo">Talleres</h2>
+
       {eliminarConfirm && (
-        <div className="modal-overlay" onClick={() => setEliminarConfirm(null)}>
-          <div className="modal-content modal-eliminar" onClick={e => e.stopPropagation()}>
-            <h3>Eliminar taller</h3>
-            <p className="modal-eliminar-desc">¿Estás seguro de que deseas eliminar este taller? Esta acci&oacute;n no se puede deshacer.</p>
-            <div className="talleres-botones">
-              <button onClick={handleEliminarConfirm} className="btn-eliminar-confirm">Eliminar</button>
-              <button onClick={() => setEliminarConfirm(null)} className="btn-cancelar">Cancelar</button>
-            </div>
-          </div>
-        </div>
+        <ConfirmModal
+          mensaje="Eliminar taller"
+          nombreTaller={talleres.find(t => t.id === eliminarConfirm)?.nombre}
+          onConfirm={handleEliminarConfirm}
+          onCancel={() => setEliminarConfirm(null)}
+        />
       )}
 
       {esAdmin && (
