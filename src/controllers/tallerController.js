@@ -1,5 +1,7 @@
 const Taller = require('../models/Taller');
 const Inscripcion = require('../models/Inscripcion');
+const ListaEspera = require('../models/ListaEspera');
+const Usuario = require('../models/Usuario');
 const { Op } = require('sequelize');
 
 const getAll = async (req, res, next) => {
@@ -268,6 +270,32 @@ const update = async (req, res, next) => {
     if (precio !== undefined) updates.precio = precio !== '' ? Number(precio) : null;
 
     await taller.update(updates);
+
+    if (updates.capacidad_maxima) {
+      const activas = await Inscripcion.count({
+        where: { taller_id: taller.id, estado: { [Op.ne]: 'cancelada' } }
+      });
+      const libres = Math.max(0, updates.capacidad_maxima - activas);
+      if (libres > 0) {
+        const espera = await ListaEspera.findAll({
+          where: { taller_id: taller.id, estado: 'pendiente' },
+          order: [['fecha_solicitud', 'ASC']],
+          limit: libres,
+          include: [{ model: Usuario, attributes: ['nombre', 'email'] }]
+        });
+        for (const e of espera) {
+          await e.update({ estado: 'aceptada' });
+          await Inscripcion.create({
+            taller_id: e.taller_id,
+            usuario_id: e.usuario_id,
+            nombre_alumno: e.Usuario?.nombre || 'Alumno',
+            email_alumno: e.Usuario?.email || 'alumno@correo.cl',
+            estado: 'confirmada'
+          });
+        }
+      }
+    }
+
     res.json(taller);
   } catch (err) {
     next(err);

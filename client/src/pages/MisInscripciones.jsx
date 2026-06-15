@@ -28,6 +28,11 @@ export default function MisInscripciones() {
 
   useEffect(() => { cargar(); }, []);
 
+  useEffect(() => {
+    const interval = setInterval(cargar, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
   const handleCancelar = async (id) => {
     if (!confirm('¿Cancelar esta inscripción? Si hay lista de espera, el cupo se asignará al siguiente.')) return;
     setError('');

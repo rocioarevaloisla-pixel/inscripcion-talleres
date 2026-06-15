@@ -81,7 +81,8 @@ const create = async (req, res, next) => {
       taller_id,
       nombre_alumno,
       email_alumno,
-      usuario_id: req.usuario.id
+      usuario_id: req.usuario.id,
+      estado: 'confirmada'
     });
 
     res.status(201).json(inscripcion);

@@ -142,7 +142,8 @@ const forgotPassword = async (req, res) => {
       expires_at: expiresAt
     });
 
-    const resetUrl = `http://localhost:5173/restablecer?token=${token}`;
+    const baseUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const resetUrl = `${baseUrl}/restablecer?token=${token}`;
 
     const { transporter: mailer, etherealUrl: ethUrl } = await getTransporter();
 

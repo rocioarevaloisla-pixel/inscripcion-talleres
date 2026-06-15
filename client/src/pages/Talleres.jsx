@@ -39,7 +39,7 @@ export default function Talleres() {
   const [exito, setExito] = useState('');
   const [busqueda, setBusqueda] = useState('');
   const [soloDisponibles, setSoloDisponibles] = useState(false);
-  const [settings, setSettings] = useState(cargarSettings);
+  const [settings, setSettings] = useState(settingsDefault);
   const [dirty, setDirty] = useState(false);
   const [eliminarConfirm, setEliminarConfirm] = useState(null);
   const [page, setPage] = useState(1);
@@ -80,6 +80,36 @@ export default function Talleres() {
 
   useEffect(() => {
     cargarTalleres(1);
+  }, []);
+
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const res = await api.get('/configuracion-visual');
+        setSettings(res.data);
+        guardarSettings(res.data);
+      } catch {
+        const local = cargarSettings();
+        setSettings(local);
+      }
+    };
+    fetchConfig();
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => cargarTalleres(page, false), 30000);
+    return () => clearInterval(interval);
+  }, [page]);
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const res = await api.get('/configuracion-visual');
+        setSettings(res.data);
+        guardarSettings(res.data);
+      } catch {}
+    }, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleChange = (e) => {
@@ -223,7 +253,15 @@ export default function Talleres() {
     setDirty(true);
   };
 
-  const guardarCambios = () => {
+  const guardarCambios = async () => {
+    if (esAdmin) {
+      try {
+        await api.put('/configuracion-visual', settings);
+      } catch {
+        setError('Error al guardar configuracion');
+        return;
+      }
+    }
     guardarSettings(settings);
     setDirty(false);
     setExito('Cambios guardados exitosamente');

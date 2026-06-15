@@ -10,6 +10,7 @@ const talleresRouter = require('./routes/talleres');
 const inscripcionesRouter = require('./routes/inscripciones');
 const estadisticasRouter = require('./routes/estadisticas');
 const listaEsperaRouter = require('./routes/listaEspera');
+const configuracionRouter = require('./routes/configuracion');
 const { verificarToken, verificarTokenOpcional } = require('./middlewares/auth');
 const { errorHandler, notFoundHandler } = require('./middlewares/errorHandler');
 
@@ -27,6 +28,7 @@ app.use('/api/talleres', verificarTokenOpcional, talleresRouter);
 app.use('/api/inscripciones', verificarToken, inscripcionesRouter);
 app.use('/api/estadisticas', verificarToken, estadisticasRouter);
 app.use('/api/lista-espera', verificarToken, listaEsperaRouter);
+app.use('/api/configuracion-visual', configuracionRouter);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/dist')));
