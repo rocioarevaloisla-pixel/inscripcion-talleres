@@ -149,84 +149,8 @@ const forgotPassword = async (req, res) => {
     const baseUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
     const resetUrl = `${baseUrl}/restablecer?token=${token}`;
 
-    try {
-      const { transporter: mailer, etherealUrl: ethUrl } = await getTransporter();
-
-      const info = await mailer.sendMail({
-        from: `"Wishdin" <${process.env.EMAIL_FROM || 'noreply@wishdin.com'}>`,
-        to: email,
-        subject: 'Restablece tu contraseña - Wishdin',
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, #450C3F, #4D3EA3); padding: 24px; text-align: center; border-radius: 12px 12px 0 0;">
-              <h1 style="color: #fff; margin: 0; font-size: 1.5rem;">Wishdin</h1>
-            </div>
-            <div style="background: #fff; padding: 32px 24px; border: 1px solid #e0dede; border-top: none; border-radius: 0 0 12px 12px;">
-              <p style="color: #333; font-size: 1rem;">Hola,</p>
-              <p style="color: #555; font-size: 0.9rem; line-height: 1.6;">
-                Recibimos una solicitud para restablecer la contraseña de tu cuenta en Wishdin.
-              </p>
-              <div style="text-align: center; margin: 28px 0;">
-                <a href="${resetUrl}"
-                   style="background: #4D3EA3; color: #fff; text-decoration: none;
-                          padding: 12px 32px; border-radius: 8px; font-weight: bold; font-size: 0.95rem;
-                          display: inline-block;">
-                  Restablecer contraseña
-                </a>
-              </div>
-              <p style="color: #777; font-size: 0.8rem; line-height: 1.5;">
-                Si no solicitaste este cambio, ignora este mensaje.
-                Este enlace expira en <strong>1 hora</strong>.
-              </p>
-              <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-              <p style="color: #999; font-size: 0.75rem;">
-                Si el botón no funciona, copia este enlace en tu navegador:<br>
-                <a href="${resetUrl}" style="color: #758AD1; word-break: break-all;">${resetUrl}</a>
-              </p>
-            </div>
-          </div>
-        `
-      });
-
-      if (ethUrl) {
-        console.log('\n═══════════════════════════════════════════════');
-        console.log('  📧 Email enviado vía Ethereal');
-        console.log('  📬  Vista previa:', nodemailer.getTestMessageUrl(info));
-        console.log('  🔗  O inicia sesión en', ethUrl);
-        console.log('     Usuario:', info.envelope.to[0]);
-        console.log('═══════════════════════════════════════════════\n');
-      } else {
-        console.log(`📧 Email enviado a ${email}: ${nodemailer.getTestMessageUrl(info)}`);
-      }
-    } catch (emailErr) {
-      console.log('\n═══════════════════════════════════════════════');
-      console.log('  ⚠️  No se pudo enviar el email a', email);
-      console.log('  🔗  Enlace para restablecer contraseña:');
-      console.log(`  ${resetUrl}`);
-      console.log('═══════════════════════════════════════════════\n');
-
-      if (process.env.NODE_ENV === 'production') {
-        return res.json({
-          mensaje: 'Si el email existe, recibirás un enlace para restablecer tu contraseña'
-        });
-      }
-
-      return res.json({
-        mensaje: 'Enlace generado (modo desarrollo — email no disponible)',
-        resetUrl,
-        dev: true
-      });
-    }
-
-    return res.json({ mensaje });
+    return res.json({ mensaje: 'Enlace generado', resetUrl, dev: true });
   } catch (err) {
-    if (process.env.NODE_ENV !== 'production' && err.resetUrl) {
-      return res.json({
-        mensaje: 'Enlace generado (modo desarrollo)',
-        resetUrl: err.resetUrl,
-        dev: true
-      });
-    }
     return res.status(500).json({ error: err.message });
   }
 };
