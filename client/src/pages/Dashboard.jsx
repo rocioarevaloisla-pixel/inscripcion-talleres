@@ -97,7 +97,7 @@ export default function Dashboard() {
     <div className="dashboard-container">
       <div className="dashboard-header">
         <h2 className="dashboard-titulo">Dashboard</h2>
-        <Link to="/talleres" className="dashboard-atajo">⚙️ Gestionar talleres</Link>
+        <Link to="/talleres" className="dashboard-atajo">Gestionar talleres</Link>
       </div>
 
       <div className="dashboard-cards">

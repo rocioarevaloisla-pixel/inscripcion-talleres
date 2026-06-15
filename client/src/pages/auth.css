@@ -154,8 +154,8 @@
 }
 
 .auth-error {
-  color: #b91c1c;
-  background: rgba(255, 255, 255, 0.15);
+  color: #ff6b6b;
+  background: #3a1a1a;
   padding: 0.5rem 1rem;
   border-radius: 5px;
   font-size: 0.78rem;
@@ -165,8 +165,8 @@
 }
 
 .auth-exito {
-  color: #0a6b3e;
-  background: rgba(255, 255, 255, 0.2);
+  color: #4ade80;
+  background: #1a3a1a;
   padding: 0.5rem 1rem;
   border-radius: 5px;
   font-size: 0.78rem;
@@ -193,7 +193,7 @@
 }
 
 .forgot-desc {
-  color: var(--old-lavender);
+  color: var(--text-secondary);
   font-size: 0.85rem;
   margin-bottom: 1.25rem;
   line-height: 1.5;
@@ -225,13 +225,14 @@
 
 .forgot-token {
   font-size: 0.75rem;
-  color: var(--old-lavender);
+  color: var(--text-primary);
   word-break: break-all;
-  background: var(--queen-pink);
+  background: var(--card-bg);
   padding: 0.5rem;
   border-radius: 6px;
   width: 80%;
   margin: 0.5rem auto;
+  border: 1px solid var(--old-lavender);
 }
 
 .forgot-token code {
@@ -271,18 +272,18 @@
 }
 
 .forgot-links a {
-  color: var(--old-lavender);
+  color: var(--middle-purple);
   font-size: 0.85rem;
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .forgot-links a:hover {
-  color: var(--middle-purple);
+  color: var(--queen-pink);
 }
 
 .auth-login .auth-olvide {
-  color: var(--old-lavender);
+  color: var(--middle-purple);
   font-size: 0.78rem;
   text-decoration: none;
   margin-top: 0.5rem;

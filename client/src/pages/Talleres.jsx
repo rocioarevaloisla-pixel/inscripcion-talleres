@@ -423,8 +423,8 @@ export default function Talleres() {
                 <div className="taller-card-footer">
                   {esAdmin ? (
                     <>
-                      <button onClick={() => handleEditar(t)} className="btn-editar">✏️ Editar</button>
-                      <button onClick={() => handleEliminar(t.id)} className="btn-eliminar">🗑️ Eliminar</button>
+                      <button onClick={() => handleEditar(t)} className="btn-editar">Editar</button>
+                      <button onClick={() => handleEliminar(t.id)} className="btn-eliminar">Eliminar</button>
                     </>
                   ) : (
                     <>

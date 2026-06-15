@@ -38,7 +38,7 @@
 .admin-tab {
   padding: 0.45rem 1rem;
   background: transparent;
-  color: var(--middle-purple);
+  color: var(--jacarta);
   border: none;
   border-radius: 4px;
   font-weight: 600;
@@ -54,7 +54,8 @@
 }
 
 .admin-tab:hover:not(.active) {
-  color: var(--queen-pink);
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--jacarta);
 }
 
 .talleres-actions {
@@ -111,12 +112,12 @@
 }
 
 .talleres-exito {
-  background: var(--queen-pink);
-  color: var(--middle-purple);
+  background: #1a3a1a;
+  color: #4ade80;
   padding: 0.75rem 1rem;
   border-radius: var(--radius-sm);
   margin-bottom: 1rem;
-  border-left: 3px solid var(--middle-purple);
+  border-left: 3px solid #4ade80;
   font-size: 0.9rem;
 }
 
@@ -293,7 +294,7 @@ td.tabla-hora {
 }
 
 .tabla-imagen-placeholder {
-  color: var(--old-lavender);
+  color: var(--text-secondary);
   font-size: 0.85rem;
 }
 
@@ -500,8 +501,8 @@ td.tabla-hora {
 .btn-editar {
   margin-right: 0.5rem;
   padding: 0.35rem 0.85rem;
-  background: var(--queen-pink);
-  color: var(--middle-purple);
+  background: var(--old-lavender);
+  color: #fff;
   border: none;
   border-radius: var(--radius-sm);
   font-weight: 600;
@@ -510,14 +511,14 @@ td.tabla-hora {
 }
 
 .btn-editar:hover {
-  background: var(--old-lavender);
+  opacity: 0.85;
   color: #fff;
 }
 
 .btn-eliminar {
   padding: 0.35rem 0.85rem;
-  background: var(--queen-pink);
-  color: var(--jacarta);
+  background: #4a1a1a;
+  color: #ff6b6b;
   border: none;
   border-radius: var(--radius-sm);
   font-weight: 600;
@@ -526,8 +527,8 @@ td.tabla-hora {
 }
 
 .btn-eliminar:hover {
-  background: var(--brown-chocolate);
-  color: white;
+  background: #6b2020;
+  color: #fff;
 }
 
 .btn-inscribir {
@@ -565,13 +566,13 @@ td.tabla-hora {
 
 .btn-inscrito {
   opacity: 1 !important;
-  background: var(--queen-pink) !important;
-  color: var(--middle-purple) !important;
+  background: #1a4a2a !important;
+  color: #4ade80 !important;
   cursor: not-allowed;
 }
 
 .talleres-vacio {
-  color: var(--old-lavender);
+  color: var(--text-secondary);
   font-style: italic;
   text-align: center;
   padding: 3rem 0;

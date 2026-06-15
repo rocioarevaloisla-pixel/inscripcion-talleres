@@ -26,7 +26,7 @@
 
 .registro-subtitulo {
   text-align: center;
-  color: var(--old-lavender);
+  color: var(--text-secondary);
   font-size: 0.9rem;
   margin-bottom: 2rem;
 }
