@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../api';
 import TalleresPanel from '../components/TalleresPanel';
 import './talleres.css';
@@ -41,36 +42,44 @@ export default function Talleres() {
   const [settings, setSettings] = useState(cargarSettings);
   const [dirty, setDirty] = useState(false);
   const [eliminarConfirm, setEliminarConfirm] = useState(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [cargandoMas, setCargandoMas] = useState(false);
 
   const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
   const esAdmin = usuario.rol === 'admin';
 
-  const cargarTalleres = async () => {
+  const cargarTalleres = async (pagina = 1, append = false) => {
+    if (append) {
+      setCargandoMas(true);
+    } else {
+      setCargando(true);
+    }
     setError('');
-    setCargando(true);
     try {
-      const res = await api.get('/talleres');
-      setTalleres(res.data);
+      const res = await api.get(`/talleres?page=${pagina}&limit=12`);
+      if (Array.isArray(res.data)) {
+        setTalleres(res.data);
+        setTotalPages(1);
+      } else {
+        if (append) {
+          setTalleres(prev => [...prev, ...res.data.talleres]);
+        } else {
+          setTalleres(res.data.talleres);
+        }
+        setTotalPages(res.data.totalPages);
+      }
+      setPage(pagina);
     } catch {
       setError('Error al cargar talleres');
     } finally {
       setCargando(false);
+      setCargandoMas(false);
     }
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setCargando(true);
-      try {
-        const res = await api.get('/talleres');
-        setTalleres(res.data);
-      } catch {
-        setError('Error al cargar talleres');
-      } finally {
-        setCargando(false);
-      }
-    };
-    fetchData();
+    cargarTalleres(1);
   }, []);
 
   const handleChange = (e) => {
@@ -191,6 +200,10 @@ export default function Talleres() {
   const tieneCupo = (taller) => {
     const inscritos = taller.inscritos_count || 0;
     return inscritos < taller.capacidad_maxima;
+  };
+
+  const handleCargarMas = () => {
+    cargarTalleres(page + 1, true);
   };
 
   const handleListaEspera = async (taller) => {
@@ -437,6 +450,7 @@ export default function Talleres() {
                   {t.descripcion && (
                     <p className="taller-card-desc">{t.descripcion}</p>
                   )}
+                  <Link to={`/taller/${t.id}`} className="taller-card-ver-detalle" onClick={e => e.stopPropagation()}>Ver detalle</Link>
                   <div className="taller-card-meta">
                     <span>📅 {formatearRango(t).fecha} · {formatearRango(t).hora}</span>
                     <span>👥 {t.inscritos_count || 0}/{t.capacidad_maxima}</span>
@@ -477,6 +491,15 @@ export default function Talleres() {
               </div>
             );
           })}
+        </div>
+      )}
+
+      {cargandoMas && (
+        <p className="talleres-cargando-mas">Cargando mas talleres...</p>
+      )}
+      {!cargando && !esAdmin && page < totalPages && (
+        <div className="talleres-cargar-mas">
+          <button onClick={handleCargarMas} className="btn-cargar-mas">Cargar mas talleres</button>
         </div>
       )}
 

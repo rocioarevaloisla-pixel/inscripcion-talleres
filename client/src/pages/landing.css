@@ -123,6 +123,162 @@
   box-shadow: none;
 }
 
+/* Top cursos */
+.landing-top-cursos {
+  padding: 3rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.landing-top-cursos h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--queen-pink);
+  text-align: center;
+  margin: 0 0 2rem;
+  letter-spacing: -0.02em;
+}
+
+.top-cursos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.top-curso-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(111, 31, 59, 0.25);
+  position: relative;
+}
+
+.top-curso-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+}
+
+.top-curso-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.top-curso-body {
+  padding: 1rem 1.25rem 1.25rem;
+  position: relative;
+}
+
+.top-curso-rank {
+  position: absolute;
+  top: -12px;
+  right: 1rem;
+  background: var(--gradient-primary);
+  color: white;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.top-curso-body h3 {
+  color: var(--queen-pink);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+  letter-spacing: -0.01em;
+}
+
+.top-curso-instructor {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  margin: 0 0 0.5rem;
+}
+
+.top-curso-inscritos {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--middle-purple);
+  background: rgba(111, 31, 59, 0.25);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+/* Como funciona */
+.landing-como-funciona {
+  padding: 3rem 2rem 4rem;
+  background: var(--card-bg);
+  border-top: 1px solid rgba(111, 31, 59, 0.3);
+  border-bottom: 1px solid rgba(111, 31, 59, 0.3);
+}
+
+.landing-como-funciona h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--queen-pink);
+  text-align: center;
+  margin: 0 0 2.5rem;
+  letter-spacing: -0.02em;
+}
+
+.como-funciona-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.como-funciona-card {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  background: var(--bg);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(111, 31, 59, 0.2);
+  transition: transform 0.25s;
+}
+
+.como-funciona-card:hover {
+  transform: translateY(-3px);
+}
+
+.como-funciona-numero {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  background: var(--gradient-primary);
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 800;
+  border-radius: 50%;
+}
+
+.como-funciona-card h3 {
+  color: var(--queen-pink);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+.como-funciona-card p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
 /* Talleres section */
 .landing-talleres {
   padding: 3rem 2rem 4rem;
@@ -154,4 +310,19 @@
   color: var(--text-secondary);
   font-size: 0.85rem;
   border-top: 1px solid var(--old-lavender);
+}
+
+@media (max-width: 768px) {
+  .top-cursos-grid,
+  .como-funciona-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .top-curso-img {
+    height: 120px;
+  }
+
+  .landing-hero h1 {
+    font-size: 2rem;
+  }
 }

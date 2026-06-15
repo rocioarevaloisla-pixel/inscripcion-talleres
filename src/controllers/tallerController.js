@@ -4,7 +4,11 @@ const { Op } = require('sequelize');
 
 const getAll = async (req, res, next) => {
   try {
-    const talleres = await Taller.findAll({
+    const page = parseInt(req.query.page) || null;
+    const limit = parseInt(req.query.limit) || 12;
+    const offset = page ? (page - 1) * limit : null;
+
+    const queryOptions = {
       include: [
         {
           model: Inscripcion,
@@ -23,7 +27,15 @@ const getAll = async (req, res, next) => {
       },
       group: ['Taller.id'],
       order: [['posicion', 'ASC'], ['id', 'ASC']]
-    });
+    };
+
+    if (offset !== null) {
+      queryOptions.limit = limit;
+      queryOptions.offset = offset;
+      queryOptions.subQuery = false;
+    }
+
+    const talleres = await Taller.findAll(queryOptions);
 
     if (req.usuario) {
       const tallerIds = talleres.map(t => t.id);
@@ -45,7 +57,17 @@ const getAll = async (req, res, next) => {
       });
     }
 
-    res.json(talleres);
+    if (offset !== null) {
+      const total = await Taller.count();
+      res.json({
+        talleres,
+        total,
+        page,
+        totalPages: Math.ceil(total / limit)
+      });
+    } else {
+      res.json(talleres);
+    }
   } catch (err) {
     next(err);
   }
@@ -53,8 +75,35 @@ const getAll = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   try {
-    const taller = await Taller.findByPk(req.params.id);
+    const taller = await Taller.findByPk(req.params.id, {
+      include: [{
+        model: Inscripcion,
+        attributes: [],
+        where: { estado: { [Op.ne]: 'cancelada' } },
+        required: false
+      }],
+      attributes: {
+        include: [
+          [require('sequelize').fn('COUNT', require('sequelize').col('Inscripcions.id')), 'inscritos_count']
+        ]
+      },
+      group: ['Taller.id']
+    });
     if (!taller) return res.status(404).json({ error: true, message: 'Taller no encontrado' });
+
+    if (req.usuario) {
+      const inscripcion = await Inscripcion.findOne({
+        where: {
+          usuario_id: req.usuario.id,
+          taller_id: taller.id,
+          estado: { [Op.ne]: 'cancelada' }
+        }
+      });
+      taller.dataValues.ya_inscrito = !!inscripcion;
+    } else {
+      taller.dataValues.ya_inscrito = false;
+    }
+
     res.json(taller);
   } catch (err) {
     next(err);

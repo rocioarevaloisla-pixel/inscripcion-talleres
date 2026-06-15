@@ -406,6 +406,20 @@ td.tabla-hora {
   overflow: hidden;
 }
 
+.taller-card-ver-detalle {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--middle-purple);
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  transition: color 0.2s;
+}
+
+.taller-card-ver-detalle:hover {
+  color: var(--queen-pink);
+  text-decoration: none;
+}
+
 .taller-card-meta {
   display: flex;
   flex-wrap: wrap;
@@ -781,4 +795,34 @@ td.tabla-hora {
 .btn-eliminar-confirm:hover {
   background: #6b2020;
   color: #fff;
+}
+
+/* === Cargar mas === */
+.talleres-cargar-mas {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.btn-cargar-mas {
+  padding: 0.7rem 2rem;
+  background: transparent;
+  color: var(--middle-purple);
+  border: 2px solid var(--middle-purple);
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cargar-mas:hover {
+  background: var(--middle-purple);
+  color: white;
+}
+
+.talleres-cargando-mas {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 1.5rem 0;
+  font-style: italic;
 }
