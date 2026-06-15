@@ -44,6 +44,7 @@ export default function Talleres() {
   const [settings, setSettings] = useState(settingsDefault);
   const [dirty, setDirty] = useState(false);
   const [eliminarConfirm, setEliminarConfirm] = useState(null);
+  const [eliminarError, setEliminarError] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [cargandoMas, setCargandoMas] = useState(false);
@@ -204,18 +205,18 @@ export default function Talleres() {
 
   const handleEliminarClick = (id) => {
     setEliminarConfirm(id);
+    setEliminarError('');
   };
 
   const handleEliminarConfirm = async () => {
     if (!eliminarConfirm) return;
-    setError('');
+    setEliminarError('');
     try {
       await api.delete(`/talleres/${eliminarConfirm}`);
       setEliminarConfirm(null);
       cargarTalleres();
     } catch (err) {
-      setEliminarConfirm(null);
-      setError(mensajeError(err));
+      setEliminarError(mensajeError(err));
     }
   };
 
@@ -349,7 +350,9 @@ export default function Talleres() {
           mensaje="Eliminar taller"
           nombreTaller={talleres.find(t => t.id === eliminarConfirm)?.nombre}
           onConfirm={handleEliminarConfirm}
-          onCancel={() => setEliminarConfirm(null)}
+          onCancel={() => { setEliminarConfirm(null); setEliminarError(''); }}
+          error={eliminarError}
+          confirmText="Sí, eliminar"
         />
       )}
 

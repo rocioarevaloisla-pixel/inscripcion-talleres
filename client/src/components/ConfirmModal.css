@@ -47,6 +47,16 @@
   margin: 0 0 1.5rem;
 }
 
+.confirm-error {
+  color: #ff6b6b;
+  background: #2a1010;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
 .confirm-mensaje strong {
   color: var(--queen-pink, #E2A6BA);
 }

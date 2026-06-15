@@ -1,6 +1,6 @@
 import './ConfirmModal.css';
 
-export default function ConfirmModal({ mensaje, nombreTaller, onConfirm, onCancel, cargando }) {
+export default function ConfirmModal({ mensaje, nombreTaller, onConfirm, onCancel, cargando, error, confirmText }) {
   return (
     <div className="confirm-overlay" onClick={onCancel}>
       <div className="confirm-modal" onClick={e => e.stopPropagation()}>
@@ -16,12 +16,13 @@ export default function ConfirmModal({ mensaje, nombreTaller, onConfirm, onCance
           {mensaje}
           {nombreTaller && <strong> &ldquo;{nombreTaller}&rdquo;</strong>}
         </p>
+        {error && <p className="confirm-error">{error}</p>}
         <div className="confirm-actions">
           <button className="confirm-btn-cancelar" onClick={onCancel} disabled={cargando}>
             No, volver
           </button>
           <button className="confirm-btn-confirmar" onClick={onConfirm} disabled={cargando}>
-            {cargando ? 'Procesando...' : 'Sí, cancelar'}
+            {cargando ? 'Procesando...' : confirmText || 'Sí, cancelar'}
           </button>
         </div>
       </div>
