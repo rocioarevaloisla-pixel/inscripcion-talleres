@@ -23,6 +23,10 @@ async function getTransporter() {
     return { transporter, etherealUrl: null };
   }
 
+  if (process.env.NODE_ENV === 'production') {
+    return { transporter: null, etherealUrl: null };
+  }
+
   const testAccount = await nodemailer.createTestAccount();
   transporter = nodemailer.createTransport({
     host: 'smtp.ethereal.email',
