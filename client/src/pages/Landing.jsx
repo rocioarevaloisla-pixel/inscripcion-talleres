@@ -13,15 +13,15 @@ export default function Landing() {
       .then(res => {
         const data = Array.isArray(res.data) ? res.data : res.data.talleres || [];
         const ordenados = [...data].sort((a, b) => (b.inscritos_count || 0) - (a.inscritos_count || 0));
-        setTalleres(ordenados.slice(0, 6));
+        setTalleres(ordenados);
       })
       .catch(() => {})
       .finally(() => setCargando(false));
   }, []);
 
   const formatearRango = (t) => {
-    const [y1, m1, d1] = (t.fecha_inicio || '').split('-');
-    const [y2, m2, d2] = (t.fecha_fin || t.fecha_inicio || '').split('-');
+    const [, m1, d1] = (t.fecha_inicio || '').split('-');
+    const [, m2, d2] = (t.fecha_fin || t.fecha_inicio || '').split('-');
     const fecha = t.fecha_inicio === t.fecha_fin || !t.fecha_fin
       ? `${d1}/${m1}`
       : `${d1}/${m1} — ${d2}/${m2}`;
