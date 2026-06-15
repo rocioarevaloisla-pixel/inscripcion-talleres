@@ -1,5 +1,6 @@
 const Inscripcion = require('../models/Inscripcion');
 const Taller = require('../models/Taller');
+const ListaEspera = require('../models/ListaEspera');
 const { Op } = require('sequelize');
 
 const getAll = async (req, res, next) => {
@@ -44,6 +45,26 @@ const create = async (req, res, next) => {
       return res.status(409).json({ error: true, message: 'Ya estás inscrito en este taller' });
     }
 
+    const newStart = new Date(`${taller.fecha_inicio}T${taller.hora_inicio || '09:00:00'}`);
+    const newEnd = new Date(`${taller.fecha_fin || taller.fecha_inicio}T${taller.hora_fin || '18:00:00'}`);
+
+    const activas = await Inscripcion.findAll({
+      where: { usuario_id: req.usuario.id, estado: { [Op.ne]: 'cancelada' } },
+      include: [{ model: Taller, attributes: ['fecha_inicio', 'fecha_fin', 'hora_inicio', 'hora_fin'] }]
+    });
+
+    const solapada = activas.some(insc => {
+      if (insc.taller_id === taller_id) return false;
+      const t = insc.Taller;
+      const start = new Date(`${t.fecha_inicio}T${t.hora_inicio || '09:00:00'}`);
+      const end = new Date(`${t.fecha_fin || t.fecha_inicio}T${t.hora_fin || '18:00:00'}`);
+      return newStart <= end && start <= newEnd;
+    });
+
+    if (solapada) {
+      return res.status(409).json({ error: true, message: 'Ya tienes una inscripción en un taller con horario solapado' });
+    }
+
     const inscripcionesActuales = await Inscripcion.count({
       where: { taller_id, estado: { [Op.ne]: 'cancelada' } }
     });
@@ -70,7 +91,7 @@ const getMisInscripciones = async (req, res, next) => {
     const inscripciones = await Inscripcion.findAll({
       where: { usuario_id: req.usuario.id },
       include: [
-        { model: Taller, attributes: ['nombre', 'instructor', 'fecha_inicio', 'capacidad_maxima', 'estado'] }
+        { model: Taller, attributes: ['nombre', 'instructor', 'fecha_inicio', 'fecha_fin', 'hora_inicio', 'hora_fin', 'capacidad_maxima', 'estado'] }
       ]
     });
     res.json(inscripciones);
@@ -79,4 +100,43 @@ const getMisInscripciones = async (req, res, next) => {
   }
 };
 
-module.exports = { getAll, create, getMisInscripciones };
+const cancel = async (req, res, next) => {
+  try {
+    const inscripcion = await Inscripcion.findOne({
+      where: { id: req.params.id, usuario_id: req.usuario.id, estado: { [Op.ne]: 'cancelada' } },
+      include: [{ model: Taller, attributes: ['id', 'nombre'] }]
+    });
+
+    if (!inscripcion) {
+      return res.status(404).json({ error: true, message: 'Inscripción no encontrada o ya cancelada' });
+    }
+
+    inscripcion.estado = 'cancelada';
+    await inscripcion.save();
+
+    const siguiente = await ListaEspera.findOne({
+      where: { taller_id: inscripcion.taller_id, estado: 'pendiente' },
+      include: [{ model: require('../models/Usuario'), attributes: ['nombre', 'email'] }],
+      order: [['fecha_solicitud', 'ASC']]
+    });
+
+    if (siguiente) {
+      siguiente.estado = 'aceptada';
+      await siguiente.save();
+
+      await Inscripcion.create({
+        taller_id: siguiente.taller_id,
+        nombre_alumno: siguiente.Usuario?.nombre || 'Alumno',
+        email_alumno: siguiente.Usuario?.email || 'alumno@correo.cl',
+        usuario_id: siguiente.usuario_id,
+        estado: 'confirmada'
+      });
+    }
+
+    res.json({ mensaje: 'Inscripción cancelada exitosamente', auto_inscrito: !!siguiente });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getAll, create, getMisInscripciones, cancel };

@@ -1,0 +1,16 @@
+$kind: http-request
+name: 409 — Duplicado/inscrito
+url: "{{baseUrl}}/inscripciones"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "taller_id": {{tallerId}},
+      "nombre_alumno": "Juan Pérez",
+      "email_alumno": "juan@correo.cl"
+    }
+order: 3000

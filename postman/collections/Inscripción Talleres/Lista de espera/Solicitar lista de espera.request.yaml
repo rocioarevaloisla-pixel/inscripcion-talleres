@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{baseUrl}}/lista-espera"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "taller_id": {{tallerId}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const jsonData = pm.response.json();
+      if (jsonData.id) {
+        pm.collectionVariables.set('listaEsperaId', jsonData.id);
+      }
+    language: text/javascript
+order: 1000

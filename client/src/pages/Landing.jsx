@@ -15,6 +15,16 @@ export default function Landing() {
       .finally(() => setCargando(false));
   }, []);
 
+  const formatearRango = (t) => {
+    const [y1, m1, d1] = (t.fecha_inicio || '').split('-');
+    const [y2, m2, d2] = (t.fecha_fin || t.fecha_inicio || '').split('-');
+    const fecha = t.fecha_inicio === t.fecha_fin || !t.fecha_fin
+      ? `${d1}/${m1}`
+      : `${d1}/${m1} — ${d2}/${m2}`;
+    const h = `${(t.hora_inicio || '09:00').slice(0,5)}-${(t.hora_fin || '18:00').slice(0,5)}`;
+    return `${fecha} · ${h}`;
+  };
+
   const tieneCupo = (t) => (t.inscritos_count || 0) < t.capacidad_maxima;
 
   const irALogin = () => navigate('/login');
@@ -63,8 +73,9 @@ export default function Landing() {
                       <p className="taller-card-desc">{t.descripcion}</p>
                     )}
                     <div className="taller-card-meta">
-                      <span>📅 {t.fecha_inicio}</span>
+                      <span>📅 {formatearRango(t)}</span>
                       <span>👥 {t.inscritos_count || 0}/{t.capacidad_maxima}</span>
+                      {t.precio != null && <span className="taller-card-precio">💰 ${Number(t.precio).toLocaleString('es-CL')}</span>}
                     </div>
                   </div>
                   <div className="taller-card-footer">

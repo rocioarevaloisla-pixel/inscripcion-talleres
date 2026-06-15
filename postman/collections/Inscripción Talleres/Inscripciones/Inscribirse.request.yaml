@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{baseUrl}}/inscripciones"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "taller_id": {{tallerId}},
+      "nombre_alumno": "Juan Pérez",
+      "email_alumno": "juan@correo.cl"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const jsonData = pm.response.json();
+      if (jsonData.id) {
+        pm.collectionVariables.set('inscripcionId', jsonData.id);
+      }
+    language: text/javascript
+order: 1000

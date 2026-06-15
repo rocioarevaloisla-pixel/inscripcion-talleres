@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{baseUrl}}/talleres/{{tallerId}}"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "nombre": "Taller de Pintura Avanzada",
+      "capacidad_maxima": 25
+    }
+order: 6000

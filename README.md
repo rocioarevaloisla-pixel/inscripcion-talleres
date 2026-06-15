@@ -71,21 +71,25 @@ Para crear un usuario admin, cambiar manualmente el rol en la BD o usar un seede
 | GET | `/api/health` | Health check |
 | POST | `/api/auth/registro` | Registro de usuario |
 | POST | `/api/auth/login` | Login, devuelve JWT |
+| POST | `/api/auth/forgot-password` | Solicitar restablecimiento de contraseña (GEN-07) |
+| POST | `/api/auth/reset-password` | Restablecer contraseña con token (GEN-07) |
 | GET | `/api/auth/perfil` | Perfil del usuario (requiere token) |
 
 ### Protegidas (requieren JWT)
 | Método | Ruta | Rol | Descripción |
 |--------|------|-----|-------------|
 | GET | `/api/talleres` | cualquiera | Listar talleres con conteo de inscritos |
-| GET | `/api/talleres/con-cupos` | cualquiera | Talleres activos con cupos disponibles |
 | GET | `/api/talleres/:id` | cualquiera | Detalle de un taller |
-| GET | `/api/talleres/:id/inscritos` | admin | Lista de inscritos en un taller |
 | POST | `/api/talleres` | admin | Crear taller |
 | PUT | `/api/talleres/:id` | admin | Actualizar taller |
 | DELETE | `/api/talleres/:id` | admin | Eliminar taller (sin inscripciones activas) |
 | GET | `/api/inscripciones` | admin | Listar todas las inscripciones |
 | GET | `/api/inscripciones/mis-inscripciones` | cualquiera | Inscripciones del usuario autenticado |
 | POST | `/api/inscripciones` | cualquiera | Inscribirse a un taller (valida cupo y estado) |
+| PUT | `/api/inscripciones/:id/cancelar` | cualquiera | Cancelar inscripción (libera cupo y auto-asigna lista de espera) |
+| GET | `/api/lista-espera/mis-solicitudes` | cualquiera | Mis solicitudes en lista de espera (rq-10) |
+| POST | `/api/lista-espera` | cualquiera | Solicitar lista de espera para un taller (rq-10) |
+| PUT | `/api/lista-espera/:id/cancelar` | cualquiera | Cancelar solicitud de lista de espera (rq-10) |
 
 ## Reglas de negocio
 
@@ -93,7 +97,19 @@ Para crear un usuario admin, cambiar manualmente el rol en la BD o usar un seede
 |-------|-------------|-------------|
 | **Cupo lleno** | 409 | No permite inscribir si el taller alcanzó su capacidad máxima |
 | **Taller inactivo** | 422 | No permite inscribir en talleres cerrados o cancelados |
+| **Inscripción duplicada** | 409 | No permite inscribirse dos veces al mismo taller |
+| **Horario solapado** | 409 | No permite inscribirse si ya tiene otra inscripción activa con horario solapado (rq-06) |
+| **Lista de espera** | — | Al cancelar una inscripción, el cupo se asigna automáticamente al primer solicitante en lista de espera (rq-10) |
 | **Eliminar con inscritos** | 409 | No permite eliminar un taller con inscripciones activas |
+
+## Evolución del esquema (GEN-12)
+
+| Migración | Fecha | Tipo | Descripción |
+|-----------|-------|------|-------------|
+| `add-usuario-id-to-inscripciones` | 2026-06-08 | AC (agregar campo) | Agrega `usuario_id` FK a inscripciones para asociar cada inscripción al usuario autenticado |
+| `add-imagen-url-to-talleres` | 2026-06-08 | AC (agregar campo) | Agrega `imagen_url` a talleres para mostrar imágenes externas en cards |
+| `create-password-reset-tokens` | 2026-06-16 | AG (agregar tabla) | Crea `password_reset_tokens` para restablecimiento de contraseña vía token con expiración (GEN-07) |
+| `add-horario-precio-to-talleres` | 2026-06-14 | AC + MT | Agrega `hora_inicio`, `hora_fin`, `precio` y cambia `fecha_fin` a NOT NULL (rq-06) |
 
 ## Scripts disponibles
 
@@ -103,6 +119,8 @@ Para crear un usuario admin, cambiar manualmente el rol en la BD o usar un seede
 | `npm start` | Inicia el backend en producción |
 | `npm run db:migrate` | Ejecuta migraciones pendientes |
 | `npm run db:migrate:undo` | Revierte todas las migraciones |
+| `npm run db:seed` | Puebla BD con datos demo (usuarios, talleres, inscripciones) |
+| `npm run db:seed:undo` | Revierte todos los seeders |
 | `cd client && npm run dev` | Inicia el frontend de desarrollo |
 
 ## Base de datos
@@ -122,6 +140,9 @@ Para crear un usuario admin, cambiar manualmente el rol en la BD o usar un seede
 | capacidad_maxima | INTEGER | Cupos disponibles |
 | fecha_inicio | DATEONLY | Fecha de inicio |
 | fecha_fin | DATEONLY | Fecha de término |
+| hora_inicio | TIME | Hora de inicio (rq-06) |
+| hora_fin | TIME | Hora de término (rq-06) |
+| precio | DECIMAL(12,2) | Precio en CLP (opcional) |
 | estado | ENUM | activo / cerrado / cancelado |
 
 ### Inscripcion — entidad secundaria (rq-02)
@@ -146,7 +167,7 @@ Relaciones: Inscripcion pertenece a Taller **(N:1)** e Inscripcion pertenece a U
 | password | STRING(255) | Hash bcrypt |
 | rol | ENUM | admin / usuario |
 
-## Matriz de avance — Hito 2
+## Matriz de avance — Hito 3
 
 | ID | Título | Estado |
 |----|--------|--------|
@@ -156,19 +177,25 @@ Relaciones: Inscripcion pertenece a Taller **(N:1)** e Inscripcion pertenece a U
 | GEN-04 | Registro de usuario | ✅ |
 | GEN-05 | Login y emisión JWT | ✅ |
 | GEN-06 | Middleware de autenticación | ✅ |
+| GEN-07 | Restablecer contraseña | ✅ |
 | GEN-08 | Manejo centralizado de errores | ✅ |
 | GEN-09 | CRUD REST y pantallas web | ✅ |
 | GEN-10 | Validaciones de entrada | ✅ |
+| GEN-11 | Colección Postman | ✅ |
+| GEN-12 | Evolución de esquema | ✅ |
+| GEN-13 | Despliegue Railway | ❌ |
 | rq-01 | Modelar entidad principal (Taller) | ✅ |
 | rq-02 | Modelar entidad secundaria (Inscripcion) | ✅ |
 | rq-03 | CRUD del recurso principal (Talleres) | ✅ |
 | rq-04 | CRUD del recurso secundario (Inscripciones) | ✅ |
 | rq-05 | Regla de negocio: cupo lleno | ✅ |
+| rq-06 | Regla de negocio: sin solapamiento horario | ✅ |
 | rq-07 | Consultas con filtros (cupos disponibles) | ✅ |
 | rq-08 | Panel de oferta de cursos | ✅ |
 | rq-09 | Flujo transaccional: inscribir alumno | ✅ |
+| rq-10 | Funcionalidad avanzada (lista de espera) | ✅ |
 
-**Total: 17/23 requisitos (74%)**
+**Total: 22/23 requisitos (96%)**
 
 ## Estructura de carpetas
 ```

@@ -26,7 +26,22 @@ const Taller = sequelize.define('Taller', {
     allowNull: false
   },
   fecha_fin: {
-    type: DataTypes.DATEONLY
+    type: DataTypes.DATEONLY,
+    allowNull: false
+  },
+  hora_inicio: {
+    type: DataTypes.TIME,
+    allowNull: false,
+    defaultValue: '09:00:00'
+  },
+  hora_fin: {
+    type: DataTypes.TIME,
+    allowNull: false,
+    defaultValue: '18:00:00'
+  },
+  precio: {
+    type: DataTypes.DECIMAL(12, 2),
+    allowNull: true
   },
   estado: {
     type: DataTypes.ENUM('activo', 'cerrado', 'cancelado'),

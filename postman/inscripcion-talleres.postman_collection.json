@@ -1,0 +1,523 @@
+{
+  "info": {
+    "name": "Inscripción Talleres",
+    "description": "Colección para probar la API de inscripción a talleres. Variables:\n- baseUrl: http://localhost:3000/api\n- token: se autocompleta al hacer login\n- tallerId: id del último taller creado\n- inscripcionId: id de la última inscripción creada",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000/api" },
+    { "key": "token", "value": "" },
+    { "key": "tallerId", "value": "" },
+    { "key": "inscripcionId", "value": "" },
+    { "key": "listaEsperaId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Registro",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  console.log('Usuario registrado exitosamente');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Usuario Test\",\n  \"email\": \"test@correo.cl\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/registro",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "registro"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "  pm.collectionVariables.set('token', jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@ejemplo.cl\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Perfil",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/perfil",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "perfil"]
+            }
+          }
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"usuario@ejemplo.com\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/forgot-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "forgot-password"]
+            }
+          }
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"TOKEN_AQUI\",\n  \"password\": \"nueva123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/reset-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "reset-password"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Talleres",
+      "item": [
+        {
+          "name": "Crear taller (admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData.id) {",
+                  "  pm.collectionVariables.set('tallerId', jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Taller de Pintura\",\n  \"instructor\": \"María González\",\n  \"capacidad_maxima\": 20,\n  \"fecha_inicio\": \"2026-07-01\",\n  \"fecha_fin\": \"2026-07-03\",\n  \"hora_inicio\": \"10:00\",\n  \"hora_fin\": \"13:00\",\n  \"precio\": 25000,\n  \"descripcion\": \"Aprende técnicas de pintura al óleo\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/talleres",
+              "host": ["{{baseUrl}}"],
+              "path": ["talleres"]
+            }
+          }
+        },
+        {
+          "name": "Listar talleres",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/talleres",
+              "host": ["{{baseUrl}}"],
+              "path": ["talleres"]
+            }
+          }
+        },
+        {
+          "name": "Obtener taller por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/talleres/{{tallerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["talleres", "{{tallerId}}"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar taller (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Taller de Pintura Avanzada\",\n  \"capacidad_maxima\": 25\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/talleres/{{tallerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["talleres", "{{tallerId}}"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar taller (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/talleres/{{tallerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["talleres", "{{tallerId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inscripciones",
+      "item": [
+        {
+          "name": "Inscribirse",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData.id) {",
+                  "  pm.collectionVariables.set('inscripcionId', jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"taller_id\": {{tallerId}},\n  \"nombre_alumno\": \"Juan Pérez\",\n  \"email_alumno\": \"juan@correo.cl\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inscripciones",
+              "host": ["{{baseUrl}}"],
+              "path": ["inscripciones"]
+            }
+          }
+        },
+        {
+          "name": "Mis inscripciones",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inscripciones/mis-inscripciones",
+              "host": ["{{baseUrl}}"],
+              "path": ["inscripciones", "mis-inscripciones"]
+            }
+          }
+        },
+        {
+          "name": "Todas las inscripciones (admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inscripciones",
+              "host": ["{{baseUrl}}"],
+              "path": ["inscripciones"]
+            }
+          }
+        },
+        {
+          "name": "Cancelar inscripción",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inscripciones/{{inscripcionId}}/cancelar",
+              "host": ["{{baseUrl}}"],
+              "path": ["inscripciones", "{{inscripcionId}}", "cancelar"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Lista de espera",
+      "item": [
+        {
+          "name": "Solicitar lista de espera",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData.id) {",
+                  "  pm.collectionVariables.set('listaEsperaId', jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"taller_id\": {{tallerId}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/lista-espera",
+              "host": ["{{baseUrl}}"],
+              "path": ["lista-espera"]
+            }
+          }
+        },
+        {
+          "name": "Mis solicitudes",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/lista-espera/mis-solicitudes",
+              "host": ["{{baseUrl}}"],
+              "path": ["lista-espera", "mis-solicitudes"]
+            }
+          }
+        },
+        {
+          "name": "Cancelar solicitud",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/lista-espera/{{listaEsperaId}}/cancelar",
+              "host": ["{{baseUrl}}"],
+              "path": ["lista-espera", "{{listaEsperaId}}", "cancelar"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Estadísticas",
+      "item": [
+        {
+          "name": "Dashboard (admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/estadisticas",
+              "host": ["{{baseUrl}}"],
+              "path": ["estadisticas"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Casos de error",
+      "item": [
+        {
+          "name": "401 — Sin token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/inscripciones",
+              "host": ["{{baseUrl}}"],
+              "path": ["inscripciones"]
+            }
+          }
+        },
+        {
+          "name": "403 — No admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Taller no autorizado\",\n  \"instructor\": \"Alguien\",\n  \"fecha_inicio\": \"2026-07-01\",\n  \"fecha_fin\": \"2026-07-01\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/talleres",
+              "host": ["{{baseUrl}}"],
+              "path": ["talleres"]
+            }
+          }
+        },
+        {
+          "name": "409 — Duplicado/inscrito",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"taller_id\": {{tallerId}},\n  \"nombre_alumno\": \"Juan Pérez\",\n  \"email_alumno\": \"juan@correo.cl\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inscripciones",
+              "host": ["{{baseUrl}}"],
+              "path": ["inscripciones"]
+            }
+          }
+        },
+        {
+          "name": "422 — Taller inactivo",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"taller_id\": 9999,\n  \"nombre_alumno\": \"Ana Soto\",\n  \"email_alumno\": \"ana@correo.cl\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inscripciones",
+              "host": ["{{baseUrl}}"],
+              "path": ["inscripciones"]
+            }
+          }
+        },
+        {
+          "name": "409 — Cupo lleno",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Taller sin cupo\",\n  \"instructor\": \"Test\",\n  \"capacidad_maxima\": 1,\n  \"fecha_inicio\": \"2026-08-01\",\n  \"fecha_fin\": \"2026-08-01\",\n  \"hora_inicio\": \"09:00\",\n  \"hora_fin\": \"12:00\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/talleres",
+              "host": ["{{baseUrl}}"],
+              "path": ["talleres"]
+            }
+          }
+        },
+        {
+          "name": "409 — Horario solapado",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"taller_id\": {{tallerId}},\n  \"nombre_alumno\": \"Otro Alumno\",\n  \"email_alumno\": \"otro@correo.cl\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inscripciones",
+              "host": ["{{baseUrl}}"],
+              "path": ["inscripciones"]
+            }
+          }
+        },
+        {
+          "name": "400 — Validaciones taller",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Validaciones\",\n  \"instructor\": \"Test\",\n  \"capacidad_maxima\": 10,\n  \"fecha_inicio\": \"2020-01-01\",\n  \"fecha_fin\": \"2030-01-01\",\n  \"hora_inicio\": \"25:00\",\n  \"hora_fin\": \"18:00\",\n  \"precio\": -100\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/talleres",
+              "host": ["{{baseUrl}}"],
+              "path": ["talleres"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

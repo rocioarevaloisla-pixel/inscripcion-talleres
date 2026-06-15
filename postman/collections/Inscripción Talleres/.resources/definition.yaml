@@ -1,0 +1,13 @@
+$kind: collection
+description: |-
+  Colección para probar la API de inscripción a talleres. Variables:
+  - baseUrl: http://localhost:3000/api
+  - token: se autocompleta al hacer login
+  - tallerId: id del último taller creado
+  - inscripcionId: id de la última inscripción creada
+variables:
+  baseUrl: http://localhost:3000/api
+  token: ""
+  tallerId: ""
+  inscripcionId: ""
+  listaEsperaId: ""

@@ -5,6 +5,8 @@ import Talleres from './pages/Talleres';
 import MisInscripciones from './pages/MisInscripciones';
 import Dashboard from './pages/Dashboard';
 import Landing from './pages/Landing';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import './pages/inicio.css';
 import './pages/landing.css';
 
@@ -59,6 +61,8 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<Auth />} />
         <Route path="/registro" element={<Auth />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/restablecer" element={<ResetPassword />} />
         <Route path="/" element={<Landing />} />
         <Route path="/inicio" element={<RutaProtegida><Inicio /></RutaProtegida>} />
         <Route path="/talleres" element={<RutaProtegida><Talleres /></RutaProtegida>} />

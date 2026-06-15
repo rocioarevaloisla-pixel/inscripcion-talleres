@@ -4,7 +4,7 @@ import './talleres.css';
 
 export default function Talleres() {
   const [talleres, setTalleres] = useState([]);
-  const [form, setForm] = useState({ nombre: '', instructor: '', capacidad_maxima: '', fecha_inicio: '', descripcion: '', estado: 'activo', imagen_url: '' });
+  const [form, setForm] = useState({ nombre: '', instructor: '', capacidad_maxima: '', fecha_inicio: '', fecha_fin: '', hora_inicio: '09:00', hora_fin: '18:00', descripcion: '', estado: 'activo', imagen_url: '', precio: '' });
   const [editando, setEditando] = useState(null);
   const [adminTab, setAdminTab] = useState('ver');
   const [error, setError] = useState('');
@@ -63,7 +63,7 @@ export default function Talleres() {
       } else {
         await api.post('/talleres', form);
       }
-      setForm({ nombre: '', instructor: '', capacidad_maxima: '', fecha_inicio: '', descripcion: '', estado: 'activo', imagen_url: '' });
+      setForm({ nombre: '', instructor: '', capacidad_maxima: '', fecha_inicio: '', fecha_fin: '', hora_inicio: '09:00', hora_fin: '18:00', descripcion: '', estado: 'activo', imagen_url: '', precio: '' });
       setEditando(null);
       setAdminTab('ver');
       cargarTalleres();
@@ -74,7 +74,7 @@ export default function Talleres() {
 
   const handleNuevo = () => {
     setEditando(null);
-    setForm({ nombre: '', instructor: '', capacidad_maxima: '', fecha_inicio: '', descripcion: '', estado: 'activo', imagen_url: '' });
+    setForm({ nombre: '', instructor: '', capacidad_maxima: '', fecha_inicio: '', fecha_fin: '', hora_inicio: '09:00', hora_fin: '18:00', descripcion: '', estado: 'activo', imagen_url: '', precio: '' });
     setAdminTab('nuevo');
   };
 
@@ -86,9 +86,13 @@ export default function Talleres() {
       instructor: taller.instructor,
       capacidad_maxima: taller.capacidad_maxima,
       fecha_inicio: taller.fecha_inicio,
+      fecha_fin: taller.fecha_fin,
+      hora_inicio: taller.hora_inicio ? taller.hora_inicio.slice(0, 5) : '09:00',
+      hora_fin: taller.hora_fin ? taller.hora_fin.slice(0, 5) : '18:00',
       descripcion: taller.descripcion || '',
       estado: taller.estado,
-      imagen_url: taller.imagen_url || ''
+      imagen_url: taller.imagen_url || '',
+      precio: taller.precio ?? ''
     });
   };
 
@@ -105,7 +109,7 @@ export default function Talleres() {
 
   const handleCancelar = () => {
     setEditando(null);
-    setForm({ nombre: '', instructor: '', capacidad_maxima: '', fecha_inicio: '', descripcion: '', estado: 'activo', imagen_url: '' });
+    setForm({ nombre: '', instructor: '', capacidad_maxima: '', fecha_inicio: '', fecha_fin: '', hora_inicio: '09:00', hora_fin: '18:00', descripcion: '', estado: 'activo', imagen_url: '', precio: '' });
     setAdminTab('ver');
   };
 
@@ -138,9 +142,30 @@ export default function Talleres() {
     }
   };
 
+  const formatearRango = (t) => {
+    const [y1, m1, d1] = (t.fecha_inicio || '').split('-');
+    const [y2, m2, d2] = (t.fecha_fin || t.fecha_inicio || '').split('-');
+    const fecha = t.fecha_inicio === t.fecha_fin || !t.fecha_fin
+      ? `${d1}/${m1}`
+      : `${d1}/${m1} — ${d2}/${m2}`;
+    const h = `${(t.hora_inicio || '09:00').slice(0, 5)}-${(t.hora_fin || '18:00').slice(0, 5)}`;
+    return { fecha, hora: h };
+  };
+
   const tieneCupo = (taller) => {
     const inscritos = taller.inscritos_count || 0;
     return inscritos < taller.capacidad_maxima;
+  };
+
+  const handleListaEspera = async (taller) => {
+    setError('');
+    try {
+      await api.post('/lista-espera', { taller_id: taller.id });
+      setExito('Te has añadido a la lista de espera');
+      cargarTalleres();
+    } catch (err) {
+      setError(err.response?.data?.message || err.response?.data?.error || 'Error al solicitar lista de espera');
+    }
   };
 
   const talleresFiltrados = talleres.filter(t => {
@@ -206,8 +231,24 @@ export default function Talleres() {
               value={form.instructor} onChange={handleChange} required />
             <input name="capacidad_maxima" type="number" placeholder="Capacidad máxima"
               value={form.capacidad_maxima} onChange={handleChange} required />
-            <input name="fecha_inicio" type="date"
-              value={form.fecha_inicio} onChange={handleChange} required />
+            <div className="talleres-horario-row">
+              <div>
+                <label>Inicio</label>
+                <input name="fecha_inicio" type="date"
+                  value={form.fecha_inicio} onChange={handleChange} required />
+                <input name="hora_inicio" type="time"
+                  value={form.hora_inicio} onChange={handleChange} required />
+              </div>
+              <div>
+                <label>Término</label>
+                <input name="fecha_fin" type="date"
+                  value={form.fecha_fin} onChange={handleChange} required />
+                <input name="hora_fin" type="time"
+                  value={form.hora_fin} onChange={handleChange} required />
+              </div>
+            </div>
+            <input name="precio" type="number" step="0.01" min="0" placeholder="Precio (opcional) — $"
+              value={form.precio} onChange={handleChange} />
             <textarea name="descripcion" placeholder="Descripción (opcional)"
               value={form.descripcion} onChange={handleChange} />
             <input name="imagen_url" placeholder="URL de la imagen (opcional)"
@@ -252,7 +293,9 @@ export default function Talleres() {
                 <th>Instructor</th>
                 <th>Capacidad</th>
                 <th>Inscritos</th>
-                <th>Inicio</th>
+                <th>Fecha</th>
+                <th>Horario</th>
+                <th>Precio</th>
                 <th>Estado</th>
                 <th>Acciones</th>
               </tr>
@@ -270,7 +313,9 @@ export default function Talleres() {
                   <td>{t.instructor}</td>
                   <td>{t.capacidad_maxima}</td>
                   <td>{t.inscritos_count || 0}</td>
-                  <td>{t.fecha_inicio}</td>
+                  <td className="tabla-fecha">{formatearRango(t).fecha}</td>
+                  <td className="tabla-hora">{formatearRango(t).hora}</td>
+                  <td>{t.precio != null ? `$${Number(t.precio).toLocaleString('es-CL')}` : '—'}</td>
                   <td>
                     <span className={t.estado === 'activo' ? 'badge-activo' : 'badge-inactivo'}>
                       {t.estado}
@@ -309,22 +354,33 @@ export default function Talleres() {
                     <p className="taller-card-desc">{t.descripcion}</p>
                   )}
                   <div className="taller-card-meta">
-                    <span>📅 {t.fecha_inicio}</span>
+                    <span>📅 {formatearRango(t).fecha} · {formatearRango(t).hora}</span>
                     <span>👥 {t.inscritos_count || 0}/{t.capacidad_maxima}</span>
+                    {t.precio != null && <span className="taller-card-precio">💰 ${Number(t.precio).toLocaleString('es-CL')}</span>}
                   </div>
                 </div>
-                <div className="taller-card-footer">
-                  <span className={t.estado === 'activo' ? 'badge-activo' : 'badge-inactivo'}>
-                    {t.estado}
-                  </span>
-                  <button
-                    onClick={() => abrirInscripcion(t)}
-                    className={`btn-inscribir ${t.ya_inscrito ? 'btn-inscrito' : ''}`}
-                    disabled={!disponible || t.estado !== 'activo'}
-                  >
-                    {t.ya_inscrito ? 'Ya inscrito' : 'Inscribirme'}
-                  </button>
-                </div>
+                  <div className="taller-card-footer">
+                    <span className={t.estado === 'activo' ? 'badge-activo' : 'badge-inactivo'}>
+                      {t.estado}
+                    </span>
+                    {t.ya_inscrito ? (
+                      <button className="btn-inscribir btn-inscrito" disabled>
+                        Ya inscrito
+                      </button>
+                    ) : !tieneCupo(t) && t.estado === 'activo' ? (
+                      <button onClick={() => handleListaEspera(t)} className="btn-espera">
+                        Unirme a lista de espera
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => abrirInscripcion(t)}
+                        className="btn-inscribir"
+                        disabled={!disponible || t.estado !== 'activo'}
+                      >
+                        Inscribirme
+                      </button>
+                    )}
+                  </div>
               </div>
             );
           })}

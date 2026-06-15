@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{baseUrl}}/talleres"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "nombre": "Taller sin cupo",
+      "instructor": "Test",
+      "capacidad_maxima": 1,
+      "fecha_inicio": "2026-08-01",
+      "fecha_fin": "2026-08-01",
+      "hora_inicio": "09:00",
+      "hora_fin": "12:00"
+    }
+order: 5000

@@ -1,0 +1,13 @@
+# Use this workspace to collaborate
+workspace:
+  id: dfb50330-2a8d-494d-8547-da7b84571d26
+
+localResources:
+  docs:
+    - ..\client\README.md
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections:
+    ..\postman\collections\Inscripción Talleres: 47b019c5-9920-46b2-905f-1fec1fc147c5

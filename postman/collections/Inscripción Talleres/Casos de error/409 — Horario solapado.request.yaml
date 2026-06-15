@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/inscripciones"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "taller_id": {{tallerId}},
+      "nombre_alumno": "Otro Alumno",
+      "email_alumno": "otro@correo.cl"
+    }
+order: 6000

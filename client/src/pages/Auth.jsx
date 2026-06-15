@@ -91,6 +91,7 @@ export default function Auth() {
             <button type="submit" disabled={loginCargando}>
               {loginCargando ? 'Ingresando...' : 'Ingresar'}
             </button>
+            <Link to="/forgot-password" className="auth-olvide">¿Olvidaste tu contraseña?</Link>
           </form>
         </div>
       </div>

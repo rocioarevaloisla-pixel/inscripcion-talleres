@@ -8,6 +8,7 @@ const authRouter = require('./routes/auth');
 const talleresRouter = require('./routes/talleres');
 const inscripcionesRouter = require('./routes/inscripciones');
 const estadisticasRouter = require('./routes/estadisticas');
+const listaEsperaRouter = require('./routes/listaEspera');
 const { verificarToken, verificarTokenOpcional } = require('./middlewares/auth');
 const { errorHandler, notFoundHandler } = require('./middlewares/errorHandler');
 
@@ -24,6 +25,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/talleres', verificarTokenOpcional, talleresRouter);
 app.use('/api/inscripciones', verificarToken, inscripcionesRouter);
 app.use('/api/estadisticas', verificarToken, estadisticasRouter);
+app.use('/api/lista-espera', verificarToken, listaEsperaRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

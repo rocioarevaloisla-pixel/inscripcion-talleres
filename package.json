@@ -7,7 +7,9 @@
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
     "db:migrate": "sequelize-cli db:migrate",
-    "db:migrate:undo": "sequelize-cli db:migrate:undo:all"
+    "db:migrate:undo": "sequelize-cli db:migrate:undo:all",
+    "db:seed": "sequelize-cli db:seed:all",
+    "db:seed:undo": "sequelize-cli db:seed:undo:all"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +22,7 @@
     "express": "^4.21.0",
     "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.22.4",
+    "nodemailer": "^8.0.11",
     "react-router-dom": "^7.17.0",
     "sequelize": "^6.37.8"
   },

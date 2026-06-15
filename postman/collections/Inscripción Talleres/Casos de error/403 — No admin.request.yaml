@@ -1,0 +1,16 @@
+$kind: http-request
+url: "{{baseUrl}}/talleres"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "nombre": "Taller no autorizado",
+      "instructor": "Alguien",
+      "fecha_inicio": "2026-07-01",
+      "fecha_fin": "2026-07-01"
+    }
+order: 2000

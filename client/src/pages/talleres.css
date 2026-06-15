@@ -166,6 +166,48 @@
   resize: vertical;
 }
 
+.talleres-horario-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.talleres-horario-row > div {
+  flex: 1;
+}
+
+.talleres-horario-row label {
+  display: block;
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+.talleres-horario-row input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+td.tabla-fecha {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+td.tabla-hora {
+  color: #666;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.taller-card-precio {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--persian-blue);
+  background: var(--lavender);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  display: inline-block;
+}
+
 .talleres-select {
   appearance: auto;
   cursor: pointer;
@@ -564,6 +606,39 @@
 
 .modal-content .taller-card-instructor {
   margin-bottom: 1.25rem;
+}
+
+.btn-cancelar-inscripcion {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #e74c3c;
+  background: #fff;
+  color: #e74c3c;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancelar-inscripcion:hover {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.btn-espera {
+  padding: 0.5rem 1rem;
+  border: 1px dashed var(--glaucous);
+  background: transparent;
+  color: var(--glaucous);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-espera:hover {
+  background: var(--lavender);
+  border-style: solid;
 }
 
 @keyframes fadeIn {
