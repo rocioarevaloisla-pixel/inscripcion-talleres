@@ -367,6 +367,13 @@ export default function Talleres() {
         <div className="talleres-header-left">
           <h2 className="talleres-titulo">Talleres</h2>
 
+      {errorModal && (
+        <ConfirmModal
+          tipo="alert"
+          mensaje={errorModal}
+          onCancel={() => setErrorModal('')}
+        />
+      )}
       {eliminarConfirm && (
         <ConfirmModal
           mensaje="Eliminar taller"
