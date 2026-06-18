@@ -122,6 +122,9 @@ const create = async (req, res, next) => {
     if (typeof nombre !== 'string' || nombre.trim() === '') {
       return res.status(422).json({ error: true, message: 'nombre debe ser un texto no vacío' });
     }
+    if (typeof instructor !== 'string' || instructor.trim() === '') {
+      return res.status(422).json({ error: true, message: 'instructor debe ser un texto no vacío' });
+    }
     if (!fecha_inicio.match(/^\d{4}-\d{2}-\d{2}$/)) {
       return res.status(422).json({ error: true, message: 'fecha_inicio debe tener formato YYYY-MM-DD' });
     }
@@ -163,6 +166,9 @@ const create = async (req, res, next) => {
       if (!/^\d{2}:\d{2}$/.test(hora_fin) && !/^\d{2}:\d{2}:\d{2}$/.test(hora_fin)) {
         return res.status(422).json({ error: true, message: 'hora_fin debe tener formato HH:MM' });
       }
+      if (hora_inicio > hora_fin) {
+        return res.status(422).json({ error: true, message: 'La hora de inicio no puede ser mayor a la hora de término' });
+      }
     }
 
     if (precio !== undefined && precio !== null && precio !== '') {
@@ -200,6 +206,9 @@ const update = async (req, res, next) => {
     if (nombre !== undefined && (typeof nombre !== 'string' || nombre.trim() === '')) {
       return res.status(422).json({ error: true, message: 'nombre debe ser un texto no vacío' });
     }
+    if (instructor !== undefined && (typeof instructor !== 'string' || instructor.trim() === '')) {
+      return res.status(422).json({ error: true, message: 'instructor debe ser un texto no vacío' });
+    }
     if (fecha_inicio !== undefined && !fecha_inicio.match(/^\d{4}-\d{2}-\d{2}$/)) {
       return res.status(422).json({ error: true, message: 'fecha_inicio debe tener formato YYYY-MM-DD' });
     }
@@ -218,11 +227,16 @@ const update = async (req, res, next) => {
       if (d.getFullYear() > 2026) {
         return res.status(422).json({ error: true, message: 'La fecha de inicio no puede ser más allá de 2026' });
       }
+      const currentFechaFin = fecha_fin !== undefined ? fecha_fin : taller.fecha_fin;
+      if (d > new Date(currentFechaFin + 'T12:00:00')) {
+        return res.status(422).json({ error: true, message: 'La fecha de inicio no puede ser posterior a la fecha de término' });
+      }
     }
 
     if (fecha_fin !== undefined) {
       const d = new Date(fecha_fin + 'T12:00:00');
-      if (fecha_inicio !== undefined && d < new Date(fecha_inicio + 'T12:00:00')) {
+      const currentFechaInicio = fecha_inicio !== undefined ? fecha_inicio : taller.fecha_inicio;
+      if (d < new Date(currentFechaInicio + 'T12:00:00')) {
         return res.status(422).json({ error: true, message: 'La fecha de fin no puede ser anterior a la fecha de inicio' });
       }
       if (d.getFullYear() > 2026) {
@@ -246,6 +260,9 @@ const update = async (req, res, next) => {
       }
       if (!/^\d{2}:\d{2}$/.test(hora_fin) && !/^\d{2}:\d{2}:\d{2}$/.test(hora_fin)) {
         return res.status(422).json({ error: true, message: 'hora_fin debe tener formato HH:MM' });
+      }
+      if (hora_inicio > hora_fin) {
+        return res.status(422).json({ error: true, message: 'La hora de inicio no puede ser mayor a la hora de término' });
       }
     }
 

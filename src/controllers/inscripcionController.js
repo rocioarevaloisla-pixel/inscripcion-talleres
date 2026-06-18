@@ -116,6 +116,11 @@ const cancel = async (req, res, next) => {
       return res.status(404).json({ error: true, message: 'Inscripción no encontrada o ya cancelada' });
     }
 
+    const tallerFecha = new Date(inscripcion.Taller.fecha_inicio + 'T23:59:59');
+    if (tallerFecha < new Date()) {
+      return res.status(422).json({ error: true, message: 'No puedes cancelar una inscripción a un taller que ya se realizó' });
+    }
+
     inscripcion.estado = 'cancelada';
     await inscripcion.save();
 
