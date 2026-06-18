@@ -221,7 +221,7 @@ const update = async (req, res, next) => {
 
     if (fecha_inicio !== undefined) {
       const d = new Date(fecha_inicio + 'T12:00:00');
-      if (d < hoy) {
+      if (fecha_inicio !== taller.fecha_inicio && d < hoy) {
         return res.status(422).json({ error: true, message: 'La fecha de inicio no puede ser anterior a hoy' });
       }
       if (d.getFullYear() > 2026) {

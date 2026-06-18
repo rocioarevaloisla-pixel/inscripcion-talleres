@@ -109,14 +109,15 @@ const cancel = async (req, res, next) => {
   try {
     const inscripcion = await Inscripcion.findOne({
       where: { id: req.params.id, usuario_id: req.usuario.id, estado: { [Op.ne]: 'cancelada' } },
-      include: [{ model: Taller, attributes: ['id', 'nombre'] }]
+      include: [{ model: Taller, attributes: ['id', 'nombre', 'fecha_inicio', 'fecha_fin'] }]
     });
 
     if (!inscripcion) {
       return res.status(404).json({ error: true, message: 'Inscripción no encontrada o ya cancelada' });
     }
 
-    const tallerFecha = new Date(inscripcion.Taller.fecha_inicio + 'T23:59:59');
+    const fin = inscripcion.Taller.fecha_fin || inscripcion.Taller.fecha_inicio;
+    const tallerFecha = new Date(fin + 'T23:59:59');
     if (tallerFecha < new Date()) {
       return res.status(422).json({ error: true, message: 'No puedes cancelar una inscripción a un taller que ya se realizó' });
     }
