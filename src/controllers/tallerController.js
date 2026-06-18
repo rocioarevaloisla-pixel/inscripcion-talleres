@@ -249,6 +249,9 @@ const update = async (req, res, next) => {
       if (!Number.isInteger(cap) || cap < 1) {
         return res.status(422).json({ error: true, message: 'capacidad_maxima debe ser un número entero positivo' });
       }
+      if (cap < taller.capacidad_maxima) {
+        return res.status(422).json({ error: true, message: 'La capacidad máxima no puede ser menor a la actual' });
+      }
     }
 
     if (hora_inicio !== undefined || hora_fin !== undefined) {

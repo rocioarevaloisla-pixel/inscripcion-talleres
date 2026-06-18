@@ -33,6 +33,7 @@ const mapa = {
   'La hora de inicio no puede ser mayor a la hora de término': 'La hora de inicio no puede ser mayor a la hora de término',
   'La fecha de inicio no puede ser posterior a la fecha de término': 'La fecha de inicio no puede ser posterior a la fecha de término',
   'No puedes cancelar una inscripción a un taller que ya se realizó': 'No puedes cancelar una inscripción a un taller que ya se realizó',
+  'La capacidad máxima no puede ser menor a la actual': 'La capacidad máxima no puede ser menor a la actual',
   'Acción permitida solo para administradores': 'Solo los administradores pueden realizar esta acción',
   'Token requerido': 'Debes iniciar sesión para continuar',
   'Token inválido o expirado': 'Tu sesión expiró. Inicia sesión nuevamente',

@@ -45,6 +45,8 @@ export default function Talleres() {
   const [dirty, setDirty] = useState(false);
   const [eliminarConfirm, setEliminarConfirm] = useState(null);
   const [eliminarError, setEliminarError] = useState('');
+  const [capacidadOriginal, setCapacidadOriginal] = useState(0);
+  const [errorModal, setErrorModal] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [cargandoMas, setCargandoMas] = useState(false);
@@ -142,22 +144,39 @@ export default function Talleres() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setErrorModal('');
 
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
     const fechaInicio = new Date(form.fecha_inicio + 'T00:00:00');
     const fechaFin = new Date(form.fecha_fin + 'T00:00:00');
 
-    if (fechaInicio < hoy) {
-      setError('La fecha de inicio no puede ser anterior a hoy');
+    if (!editando && fechaInicio < hoy) {
+      setErrorModal('La fecha de inicio no puede ser anterior a hoy');
       return;
     }
-    if (fechaInicio.getFullYear() > 2026) {
-      setError('La fecha de inicio no puede ser más allá de 2026');
+    if (!editando && fechaInicio.getFullYear() > 2026) {
+      setErrorModal('La fecha de inicio no puede ser más allá de 2026');
       return;
     }
     if (fechaFin < fechaInicio) {
-      setError('La fecha de fin no puede ser anterior a la fecha de inicio');
+      setErrorModal('La fecha de fin no puede ser anterior a la fecha de inicio');
+      return;
+    }
+    if (fechaFin.getFullYear() > 2026) {
+      setErrorModal('La fecha de término no puede ser más allá de 2026');
+      return;
+    }
+    if (form.capacidad_maxima && (!Number.isInteger(Number(form.capacidad_maxima)) || Number(form.capacidad_maxima) < 1)) {
+      setErrorModal('La capacidad máxima debe ser un número entero positivo');
+      return;
+    }
+    if (editando && form.capacidad_maxima && Number(form.capacidad_maxima) < capacidadOriginal) {
+      setErrorModal('La capacidad máxima no puede ser menor a la actual');
+      return;
+    }
+    if (form.precio && (isNaN(Number(form.precio)) || Number(form.precio) < 0)) {
+      setErrorModal('El precio debe ser un número positivo');
       return;
     }
 
@@ -178,6 +197,7 @@ export default function Talleres() {
 
   const handleNuevo = () => {
     setEditando(null);
+    setCapacidadOriginal(0);
     setForm({ nombre: '', instructor: '', capacidad_maxima: '', fecha_inicio: '', fecha_fin: '', hora_inicio: '09:00', hora_fin: '18:00', descripcion: '', estado: 'activo', imagen_url: '', precio: '' });
     setAdminTab('nuevo');
   };
@@ -185,6 +205,7 @@ export default function Talleres() {
   const handleEditar = (taller) => {
     setAdminTab('nuevo');
     setEditando(taller.id);
+    setCapacidadOriginal(taller.capacidad_maxima);
     setForm({
       nombre: taller.nombre,
       instructor: taller.instructor,
@@ -222,6 +243,7 @@ export default function Talleres() {
 
   const handleCancelar = () => {
     setEditando(null);
+    setCapacidadOriginal(0);
     setForm({ nombre: '', instructor: '', capacidad_maxima: '', fecha_inicio: '', fecha_fin: '', hora_inicio: '09:00', hora_fin: '18:00', descripcion: '', estado: 'activo', imagen_url: '', precio: '' });
     setAdminTab('ver');
   };
